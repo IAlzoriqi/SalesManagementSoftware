@@ -69,17 +69,17 @@ Sales management system, where this system manages sales for small shops and the
        <br>
         <br>
      <div style="Width:80%">
-    <img src="Image/1.png"/>
+    <img src="image/1.png"/>
     </div>
      <br>
     <div>
-    <img src="Image/2.png"/>
+    <img src="image/2.png"/>
       </div>
        <br>
       <div>
-    <img src="./Image/3.png"/>
+    <img src="image/3.png"/>
       </div>
         <div>
-    <img src="./Image/4.png"/>
+    <img src="image/4.png"/>
       </div>
     </body>

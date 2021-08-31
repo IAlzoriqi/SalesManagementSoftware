@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="Pizzaria1.UserControlInicio" Loaded="UserControl_Loaded"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Pizzaria1"
+             mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Height="708" Width="auto">
+    <Grid>
+        <materialDesign:TransitioningContent x:Name="TrainsitionigContentSlide" OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft, Duration=0:0:0.8}">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                <Grid Background="{x:Null}">
+                    <StackPanel>
+
+                        <Grid HorizontalAlignment="Left" Height="616" Margin="0,44,0,0" VerticalAlignment="Top" Width="636" RenderTransformOrigin="0.5,0.5" Background="{x:Null}">
+                            <TextBox x:Name="txtfname" HorizontalAlignment="Left" Height="30" Margin="146,115,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="278"  Background="White" BorderThickness="0,0,0,3" BorderBrush="#FF2196F3" Foreground="#FF2196F3"/>
+                            <Label x:Name="labelCreateAcount" Content=" انشاء مستخدم" Foreground="#FF2196F3" HorizontalAlignment="Left" Height="35" Margin="199,19,0,0" VerticalAlignment="Top" Width="136"  Background="Transparent" FontFamily="Segoe UI Black" FontSize="20"/>
+                            <Label x:Name="label" Foreground="#FF2196F3" Content="ادخل الاسم الاول" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="201" Canvas.Top="150" Background="Transparent" Margin="228,81,0,0" FontSize="14"/>
+                            <TextBox x:Name="txtlname"  HorizontalAlignment="Left"  FontSize="12" Height="30" Margin="146,162,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="278"  Background="White" BorderThickness="0,0,0,3" BorderBrush="#FF2196F3" Foreground="#FF2196F3"/>
+                            <TextBox x:Name="txtuname" HorizontalAlignment="Left" FontSize="12"  Height="30" Margin="146,214,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="278"  Background="White" BorderThickness="0,0,0,3" BorderBrush="#FF2196F3" Foreground="#FF2196F3"/>
+                            <TextBox x:Name="txtpass" HorizontalAlignment="Left" FontSize="12"  Height="30" Margin="146,268,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="278"  Background="White" BorderThickness="0,0,0,3" BorderBrush="#FF2196F3" Foreground="#FF2196F3"/>
+                            <TextBox x:Name="txtconfpass" HorizontalAlignment="Left" FontSize="12"  Height="30" Margin="146,316,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="278"  Background="White" BorderThickness="0,0,0,3" BorderBrush="#FF2196F3" Foreground="#FF2196F3"/>
+                            <TextBox x:Name="txtphoneNumber" HorizontalAlignment="Left" FontSize="12"  Height="30" Margin="146,371,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="278"  Background="White" BorderThickness="0,0,0,3" BorderBrush="#FF2196F3" Foreground="#FF2196F3"/>
+                            <Label x:Name="label_Copy" Foreground="#FF2196F3" Content="ادخل الاسم الاخير" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Margin="228,134,0,0" FontSize="14" Height="28"/>
+                            <Label x:Name="label_Copy1" Foreground="#FF2196F3" Content="ادخل اسم الدخول  " HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Margin="228,185,0,0" FontSize="14"/>
+                            <Label x:Name="label_Copy2" Foreground="#FF2196F3" Content="ادخل المكان" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Margin="237,402,0,0" FontSize="14"/>
+                            <Label x:Name="label_Copy3" Foreground="#FF2196F3" Content="ادخل صلاحية المستخدم" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Margin="201,455,0,0" FontSize="14" RenderTransformOrigin="0.504,7.818"/>
+                            <Label x:Name="label_Copy4" Foreground="#FF2196F3" Content="ادخلرقم التلفون" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Margin="237,337,0,0" FontSize="14"/>
+                            <Label x:Name="label_Copy5" Foreground="#FF2196F3"  Content="ادخل كلمة السر" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Margin="237,235,0,0" FontSize="14" RenderTransformOrigin="0.471,-5.102"/>
+                            <Label x:Name="label_Copy6" Foreground="#FF2196F3" Content="اعد كلمة السر" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Margin="228,287,0,0" FontSize="14" RenderTransformOrigin="0.471,-5.102"/>
+                            <ComboBox x:Name="cmpotype" HorizontalAlignment="Left" Margin="146,489,0,0" VerticalAlignment="Top" Width="278" Height="29" Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0,0,0,3">
+                                <ComboBox.Background>
+                                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                        <GradientStop Color="White" Offset="0" />
+                                        <GradientStop Color="White" Offset="1" />
+                                    </LinearGradientBrush>
+                                </ComboBox.Background>
+                            </ComboBox>
+                            <ComboBox x:Name="cmpoLocation" HorizontalAlignment="Left" Margin="146,430,0,0" VerticalAlignment="Top" Width="278" Height="29" Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0,0,0,3">
+                                <ComboBox.Background>
+                                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                        <GradientStop Color="White" Offset="0" />
+                                        <GradientStop Color="White" Offset="1" />
+                                    </LinearGradientBrush>
+                                </ComboBox.Background>
+                            </ComboBox>
+                            <Button x:Name="btnSaveUser" Content="حفظ المستخدم" HorizontalAlignment="Left" Margin="146,541,0,0" VerticalAlignment="Top" Width="258" RenderTransformOrigin="-0.492,-0.085" Click="btnSaveUser_Click" />
+                            <Label x:Name="lblerror" Foreground="Red"  HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Margin="146,578,0,0" FontSize="14" RenderTransformOrigin="0.471,-5.102"/>
+
+
+                        </Grid>
+                    </StackPanel>
+
+                </Grid>
+            </StackPanel>
+        </materialDesign:TransitioningContent>
+    </Grid>
+</UserControl>
+

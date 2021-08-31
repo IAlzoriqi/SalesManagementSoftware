@@ -1,0 +1,40 @@
+﻿<Window x:Class="Pizzaria1.FRMgetAllSupliers"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Pizzaria1"
+        mc:Ignorable="d"
+        Title="FRMgetAllSupliers" Height="853.972" Width="862.546">
+
+
+
+    <Grid Margin="0,0,1152,10">
+
+
+        <DataGrid  
+            AutoGenerateColumns="False" 
+            CanUserAddRows="False"
+            x:Name="dataGridSuplier"
+            x:FieldModifier="public"
+            SelectionChanged="dataGridSuplier_SelectionChanged"
+            HorizontalAlignment="Left" Margin="7,6,-850,0" Width="843" Loaded="dataGrid_Loaded" AlternatingRowBackground="#FF2196F3" Height="780"  VerticalAlignment="Top">
+            <DataGrid.Columns>
+
+                <DataGridTextColumn  Header=" الايدي  " Binding="{Binding SUPPLIER_ID}" Width="60"></DataGridTextColumn>
+                <!--<DataGridTextColumn Header=" اسم العميل " Binding="{Binding NAME }" Width="100"></DataGridTextColumn>-->
+                <!-- <DataGridTextColumn Header=" رقم المنتج" Binding="{Binding PRODECTid}" Width="100"></DataGridTextColumn> -->
+                <DataGridTextColumn Header="  اسم المحل " Binding="{Binding COMPANY_NAME }" Width="140"></DataGridTextColumn>
+                <DataGridTextColumn Header="  التلفون " Binding="{Binding PHONE_NUMBER }" Width="100"></DataGridTextColumn>
+                <DataGridTextColumn Header=" رقم الموقع " Binding="{Binding LOCATION_ID }" Width="100"></DataGridTextColumn>
+                <DataGridTextColumn Header="  المحافظة " Binding="{Binding CITY }" Width="100"></DataGridTextColumn>
+                <DataGridTextColumn Header="  الشارع " Binding="{Binding STREET }" Width="100"></DataGridTextColumn>
+
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+
+    </Grid>
+</Window>

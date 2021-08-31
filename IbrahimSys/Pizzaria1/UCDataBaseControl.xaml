@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="Pizzaria1.UserControl1"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Pizzaria1"
+             mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+
+        <local:SalesandInventorySystemDataSet x:Key="salesandInventorySystemDataSet"/>
+        <CollectionViewSource x:Key="categoryViewSource" Source="{Binding category, Source={StaticResource salesandInventorySystemDataSet}}"/>
+    </UserControl.Resources>
+    <Grid DataContext="{StaticResource categoryViewSource}">
+        <materialDesign:TransitioningContent x:Name="TrainsitionigContentSlide" OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft, Duration=0:0:0.8}">
+            <Grid Height="364" Width="679">
+
+                <Grid x:Name="grid3" HorizontalAlignment="Left" Margin="165,175,0,0" VerticalAlignment="Top">
+
+                </Grid>
+                <Label x:Name="label_Copy3" Foreground="#FF2196F3" Content="اسماء قاعدة االبيانات" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Margin="83,78,0,0" FontSize="14" RenderTransformOrigin="0.504,7.818"/>
+                <ComboBox x:Name="cmpogetdb" HorizontalAlignment="Left" Margin="232,78,0,0" VerticalAlignment="Top" Width="278" Height="29" Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0,0,0,3">
+                    <ComboBox.Background>
+                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                            <GradientStop Color="White" Offset="0" />
+                            <GradientStop Color="White" Offset="1" />
+                        </LinearGradientBrush>
+                    </ComboBox.Background>
+                </ComboBox>
+                <Button x:Name="btnSaveUser" Content="Dttach" HorizontalAlignment="Left" Margin="299,124,0,0" VerticalAlignment="Top" Width="99" RenderTransformOrigin="-0.492,-0.085" Click="btnSaveUser_Click" />
+                <Label x:Name="label_Copy" Foreground="#FF2196F3" Content="اسماء قاعدة االبيانات" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Margin="83,146,0,0" FontSize="14" RenderTransformOrigin="0.504,7.818"/>
+                <Button x:Name="btnattatchdb" Content="Attach DB" HorizontalAlignment="Left" Margin="299,175,0,0" VerticalAlignment="Top" Width="99" RenderTransformOrigin="-0.492,-0.085" Click="Btnattatchdb_Click" />
+                <Label x:Name="lablfilebath" Foreground="#FF2196F3" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Margin="253,302,0,0" FontSize="14" RenderTransformOrigin="0.504,7.818"/>
+                <Button x:Name="btncopyhdb" Content="Copy DB" HorizontalAlignment="Left" Margin="299,230,0,0" VerticalAlignment="Top" Width="99" RenderTransformOrigin="-0.492,-0.085" Click="Btncopyhdb_Click" />
+            </Grid>
+        </materialDesign:TransitioningContent>
+    </Grid>
+</UserControl>

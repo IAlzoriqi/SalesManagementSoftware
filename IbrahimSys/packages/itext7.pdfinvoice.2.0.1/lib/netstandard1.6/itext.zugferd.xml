@@ -1,0 +1,2763 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>itext.zugferd</name>
+    </assembly>
+    <members>
+        <member name="T:iText.Zugferd.Exceptions.DataIncompleteException">
+            <summary>
+            This exception is thrown when you try to create a ZUGFeRD XML file
+            that doesn't contain all the required data.
+            </summary>
+        </member>
+        <member name="M:iText.Zugferd.Exceptions.DataIncompleteException.#ctor(System.String)">
+            <summary>Instantiates a new data incomplete exception.</summary>
+            <param name="tag">the tag</param>
+        </member>
+        <member name="T:iText.Zugferd.Exceptions.InvalidCodeException">
+            <summary>
+            This exception is thrown when you try to create a ZUGFeRD XML file
+            using data that doesn't have the correct format, e.g.
+            </summary>
+            <remarks>
+            This exception is thrown when you try to create a ZUGFeRD XML file
+            using data that doesn't have the correct format, e.g. you have entered
+            "S" (which is a Tax Category code) when a Tax Type code is expected.
+            </remarks>
+        </member>
+        <member name="M:iText.Zugferd.Exceptions.InvalidCodeException.#ctor(System.String,System.String)">
+            <summary>Instantiates a new invalid code exception.</summary>
+            <param name="code">the code</param>
+            <param name="context">the context</param>
+        </member>
+        <member name="T:iText.Zugferd.InvoiceDOM">
+            <summary>
+            Represents the DOM structure of a ZUGFeRD invoice. It will load the data from the IBasicProfile implementation. This class is also responsible to transform this dom structure into an XML.
+            </summary>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.#ctor(iText.Zugferd.Profiles.IBasicProfile)">
+            <summary>Creates an object that will import data into an XML template.</summary>
+            <param name="data">
+            If this is an instance of BASICInvoice, the BASIC profile will be used;
+            If this is an instance of COMFORTInvoice, the COMFORT profile will be used.
+            </param>
+            <exception cref="T:System.IO.IOException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.#ctor(iText.Zugferd.Profiles.IBasicProfile,iText.Zugferd.InvoiceProperties)">
+            <summary>Creates an object that will import data into an XML template.</summary>
+            <param name="data">
+            If this is an instance of BASICInvoice, the BASIC profile will be used;
+            If this is an instance of COMFORTInvoice, the COMFORT profile will be used.
+            </param>
+            <param name="properties">Invoice propertis.</param>
+            <exception cref="T:System.IO.IOException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportData(System.Xml.Linq.XElement,iText.Zugferd.Profiles.IBasicProfile)">
+            <summary>Imports the data into the XML template.</summary>
+            <param name="doc">the Document object we are going to populate</param>
+            <param name="data">the interface that gives us access to the data</param>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportSpecifiedExchangedDocumentContext(System.Xml.Linq.XElement,iText.Zugferd.Profiles.IBasicProfile)">
+            <summary>Imports the data for the following tag: rsm:SpecifiedExchangedDocumentContext</summary>
+            <param name="element">the rsm:SpecifiedExchangedDocumentContext element</param>
+            <param name="data">the invoice data</param>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportHeaderExchangedDocument(System.Xml.Linq.XElement,iText.Zugferd.Profiles.IBasicProfile)">
+            <summary>Imports the data for the following tag: rsm:HeaderExchangedDocument.</summary>
+            <param name="element">the rsm:HeaderExchangedDocument element</param>
+            <param name="data">the invoice data</param>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportContent(System.Xml.Linq.XElement,System.String,System.String,System.String[])">
+            <summary>Helper method to set the content of a tag.</summary>
+            <param name="parent">the parent element of the tag</param>
+            <param name="tag">the tag for which we want to set the content</param>
+            <param name="content">the new content for the tag</param>
+            <param name="attributes">
+            a sequence of attributes of which
+            the odd elements are keys, the even elements the
+            corresponding value.
+            </param>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportDateTime(System.Xml.Linq.XElement,System.String,System.String,System.DateTime)">
+            <summary>Set the content of a date tag along with the attribute that defines the format.</summary>
+            <param name="parent">the parent element that holds the date tag</param>
+            <param name="tag">the date tag we want to change</param>
+            <param name="dateTimeFormat">the format that will be used as an attribute</param>
+            <param name="dateTime">the actual date</param>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportIncludedNotes(System.Xml.Linq.XElement,System.Int32,System.String[][],System.String[])">
+            <summary>
+            Includes notes and (in case of the COMFORT profile) the subject codes
+            for those notes.
+            </summary>
+            <param name="parent">the parent element of the tag we want to change</param>
+            <param name="level">the level where the notices are added (header or line)</param>
+            <param name="notes">array of notes</param>
+            <param name="notesCodes">
+            array of codes for the notes.
+            If not null, notes and notesCodes need to have an equal number of elements.
+            </param>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportSpecifiedSupplyChainTradeTransaction(System.Xml.Linq.XElement,iText.Zugferd.Profiles.IBasicProfile)">
+            <summary>Imports the data for the following tag: rsm:SpecifiedSupplyChainTradeTransaction</summary>
+            <param name="element"/>
+            <param name="data">the invoice data</param>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportSellerTradeParty(System.Xml.Linq.XElement,iText.Zugferd.Profiles.IBasicProfile)">
+            <summary>Gets the seller trade party data to import this data.</summary>
+            <param name="parent">the parent element</param>
+            <param name="data">the data</param>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportBuyerTradeParty(System.Xml.Linq.XElement,iText.Zugferd.Profiles.IBasicProfile)">
+            <summary>Gets the buyer trade party data to import this data.</summary>
+            <param name="parent">the parent element</param>
+            <param name="data">the data</param>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportInvoiceeTradeParty(System.Xml.Linq.XElement,iText.Zugferd.Profiles.IComfortProfile)">
+            <summary>Gets the invoicee party data to import this data.</summary>
+            <param name="parent">the parent element</param>
+            <param name="data">the data</param>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportTradeParty(System.Xml.Linq.XElement,System.String,System.String[],System.String[],System.String,System.String,System.String,System.String,System.String,System.String,System.String[],System.String[])">
+            <summary>Imports trade party information (could be seller, buyer or invoicee).</summary>
+            <param name="parent">the parent element</param>
+            <param name="id"/>
+            <param name="globalID"/>
+            <param name="globalIDScheme"/>
+            <param name="name"/>
+            <param name="postcode"/>
+            <param name="lineOne"/>
+            <param name="lineTwo"/>
+            <param name="countryID"/>
+            <param name="cityName"/>
+            <param name="taxRegistrationID"/>
+            <param name="taxRegistrationSchemeID"/>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportPaymentMeans(System.Xml.Linq.XElement,iText.Zugferd.Profiles.IBasicProfile)">
+            <summary>Gets the payment means data to imports this data.</summary>
+            <param name="parent">the parent element</param>
+            <param name="data">the data</param>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportPaymentMeans(System.Xml.Linq.XElement,System.String,System.String[],System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>Imports payment means data.</summary>
+            <param name="parent">the parent element</param>
+            <param name="typeCode"/>
+            <param name="information"/>
+            <param name="id"/>
+            <param name="scheme"/>
+            <param name="payerIban"/>
+            <param name="payerProprietaryID"/>
+            <param name="iban"/>
+            <param name="accID"/>
+            <param name="accName"/>
+            <param name="payerBic"/>
+            <param name="payerBank"/>
+            <param name="inst"/>
+            <param name="bic"/>
+            <param name="bank"/>
+            <param name="payerInst"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportTax(System.Xml.Linq.XElement,iText.Zugferd.Profiles.IBasicProfile)">
+            <summary>Gets tax data to import the this data.</summary>
+            <param name="parent">the parent element</param>
+            <param name="data">the data</param>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportTax(System.Xml.Linq.XElement,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>Imports tax data.</summary>
+            <param name="parent"/>
+            <param name="calculatedAmount"/>
+            <param name="currencyID"/>
+            <param name="typeCode"/>
+            <param name="exemptionReason"/>
+            <param name="basisAmount"/>
+            <param name="basisAmountCurr"/>
+            <param name="category"/>
+            <param name="percent"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportSpecifiedTradeAllowanceCharge(System.Xml.Linq.XElement,iText.Zugferd.Profiles.IComfortProfile)">
+            <summary>Gets specified trade allowance charge data to import the this data.</summary>
+            <param name="parent">the parent element</param>
+            <param name="data">the data</param>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportSpecifiedTradeAllowanceCharge(System.Xml.Linq.XElement,System.Boolean,System.String,System.String,System.String,System.String[],System.String[],System.String[])">
+            <summary>Imports specified trade allowance charge.</summary>
+            <param name="parent"/>
+            <param name="indicator"/>
+            <param name="actualAmount"/>
+            <param name="actualAmountCurrency"/>
+            <param name="reason"/>
+            <param name="typeCode"/>
+            <param name="categoryCode"/>
+            <param name="percent"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportSpecifiedLogisticsServiceCharge(System.Xml.Linq.XElement,iText.Zugferd.Profiles.IComfortProfile)">
+            <summary>Gets specified logistics service charge data to import the this data.</summary>
+            <param name="parent">the parent element</param>
+            <param name="data">the data</param>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportSpecifiedLogisticsServiceCharge(System.Xml.Linq.XElement,System.String[],System.String,System.String,System.String[],System.String[],System.String[])">
+            <summary>Imports specified logistics service charge data.</summary>
+            <param name="parent">the parent element</param>
+            <param name="description"/>
+            <param name="appliedAmount"/>
+            <param name="currencyID"/>
+            <param name="typeCode"/>
+            <param name="categoryCode"/>
+            <param name="percent"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportSpecifiedTradePaymentTerms(System.Xml.Linq.XElement,iText.Zugferd.Profiles.IComfortProfile)">
+            <summary>Gets specified trade payment terms data to import the this data.</summary>
+            <param name="parent">the parent element</param>
+            <param name="data">the data</param>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportSpecifiedTradePaymentTerms(System.Xml.Linq.XElement,System.String[],System.DateTime,System.String)">
+            <summary>Imports specified trade payment terms.</summary>
+            <param name="parent">the parent element</param>
+            <param name="description"/>
+            <param name="dateTime"/>
+            <param name="dateTimeFormat"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportLineItemsComfort(System.Xml.Linq.XElement,iText.Zugferd.Profiles.IComfortProfile)">
+            <summary>Gets line item data to import the this data (comfort profile).</summary>
+            <param name="parent">the parent element</param>
+            <param name="data">the data</param>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportLineItemComfort(System.Xml.Linq.XElement,System.String,System.String[][],System.String,System.String,System.String,System.String,System.Boolean[],System.String[],System.String[],System.String[],System.String,System.String,System.String,System.String,System.String,System.String,System.String[],System.String[],System.String[],System.String[],System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>Imports line item data (comfort profile).</summary>
+            <param name="parent">the parent element</param>
+            <param name="lineID"/>
+            <param name="note"/>
+            <param name="grossPriceChargeAmount"/>
+            <param name="grossPriceChargeAmountCurrencyID"/>
+            <param name="grossPriceBasisQuantity"/>
+            <param name="grossPriceBasisQuantityCode"/>
+            <param name="grossPriceTradeAllowanceChargeIndicator"/>
+            <param name="grossPriceTradeAllowanceChargeActualAmount"/>
+            <param name="grossPriceTradeAllowanceChargeActualAmountCurrencyID"/>
+            <param name="grossPriceTradeAllowanceChargeReason"/>
+            <param name="netPriceChargeAmount"/>
+            <param name="netPriceChargeAmountCurrencyID"/>
+            <param name="netPriceBasisQuantity"/>
+            <param name="netPriceBasisQuantityCode"/>
+            <param name="billedQuantity"/>
+            <param name="billedQuantityCode"/>
+            <param name="settlementTaxTypeCode"/>
+            <param name="settlementTaxExemptionReason"/>
+            <param name="settlementTaxCategoryCode"/>
+            <param name="settlementTaxApplicablePercent"/>
+            <param name="totalAmount"/>
+            <param name="totalAmountCurrencyID"/>
+            <param name="specifiedTradeProductGlobalID"/>
+            <param name="specifiedTradeProductSchemeID"/>
+            <param name="specifiedTradeProductSellerAssignedID"/>
+            <param name="specifiedTradeProductBuyerAssignedID"/>
+            <param name="specifiedTradeProductName"/>
+            <param name="specifiedTradeProductDescription"/>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportAppliedTradeAllowanceCharge(System.Xml.Linq.XElement,System.Boolean,System.String,System.String,System.String)">
+            <summary>Imports applied trade allowance charge data (line items).</summary>
+            <param name="parent">the parent element</param>
+            <param name="indicator"/>
+            <param name="actualAmount"/>
+            <param name="currencyID"/>
+            <param name="reason"/>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportTax(System.Xml.Linq.XElement,System.String,System.String,System.String,System.String)">
+            <summary>Imports tax data.</summary>
+            <param name="parent">the parent element</param>
+            <param name="typeCode"/>
+            <param name="exemptionReason"/>
+            <param name="category"/>
+            <param name="percent"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportLineItemsBasic(System.Xml.Linq.XElement,iText.Zugferd.Profiles.IBasicProfile)">
+            <summary>Gets line data to import the this data (basic profile).</summary>
+            <param name="parent"/>
+            <param name="data"/>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ImportLineItemBasic(System.Xml.Linq.XElement,System.String,System.String,System.String)">
+            <summary>Imports the data for a line item (basic profile)</summary>
+            <param name="parent">the parent element</param>
+            <param name="quantity"/>
+            <param name="code"/>
+            <param name="name"/>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.ToXML">
+            <summary>Exports the Document as an XML file.</summary>
+            <returns>a byte[] with the data in XML format</returns>
+            <exception cref="!:Javax.Xml.Transform.TransformerException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.RemoveEmptyNodes(System.Xml.Linq.XNode)">
+            <summary>
+            It is forbidden for a ZUGFeRD XML to contain empty tags, hence
+            we use this method recursively to remove empty nodes.
+            </summary>
+            <param name="node">the node from which we want to remove the empty nodes</param>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceDOM.Check(System.String,System.String)">
+            <summary>Checks if a string is empty and throws a DataIncompleteException if so.</summary>
+            <param name="s">the String to check</param>
+            <param name="message">the message if an exception is thrown</param>
+            <exception cref="T:iText.Zugferd.Exceptions.DataIncompleteException"/>
+        </member>
+        <member name="M:iText.Zugferd.InvoiceProperties.SetEventCountingMetaInfo(iText.Kernel.Counter.Event.IMetaInfo)">
+            <summary>Sets document meta info.</summary>
+            <remarks>
+            Sets document meta info. This meta info will be passed to the
+            <see cref="T:iText.Kernel.Counter.EventCounter"/>
+            with
+            <see cref="T:iText.Zugferd.Events.PdfInvoiceEvent"/>
+            and can be used to determine event origin.
+            </remarks>
+            <param name="metaInfo">meta info to set</param>
+            <returns>
+            this
+            <see cref="T:iText.Zugferd.InvoiceProperties"/>
+            instance
+            </returns>
+        </member>
+        <member name="T:iText.Zugferd.Profiles.BasicProfileImp">
+            <summary>
+            This implementation of the BasicProfile contains member-variables that store
+            all the data needed to create an XML attachment for a ZUGFeRD invoice that
+            conforms with the Basic profile.
+            </summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.test">
+            <summary>The test.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.id">
+            <summary>The id.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.name">
+            <summary>The name.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.typeCode">
+            <summary>The type code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.date">
+            <summary>The date.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.dateFormat">
+            <summary>The date format.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.notes">
+            <summary>The notes.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.sellerName">
+            <summary>The seller name.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.sellerPostcode">
+            <summary>The seller post code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.sellerLineOne">
+            <summary>The seller line one.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.sellerLineTwo">
+            <summary>The seller line two.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.sellerCityName">
+            <summary>The seller city name.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.sellerCountryID">
+            <summary>The seller country ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.sellerTaxRegistrationID">
+            <summary>The seller tax registration ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.sellerTaxRegistrationSchemeID">
+            <summary>The seller tax registration scheme ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.buyerName">
+            <summary>The buyer name.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.buyerPostcode">
+            <summary>The buyer postcode.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.buyerLineOne">
+            <summary>The buyer line one.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.buyerLineTwo">
+            <summary>The buyer line two.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.buyerCityName">
+            <summary>The buyer city name.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.buyerCountryID">
+            <summary>The buyer country ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.buyerTaxRegistrationID">
+            <summary>The buyer tax registration ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.buyerTaxRegistrationSchemeID">
+            <summary>The buyer tax registration scheme ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.deliveryDate">
+            <summary>The delivery date.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.deliveryDateFormat">
+            <summary>The delivery date format.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.paymentReference">
+            <summary>The payment reference.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.invoiceCurrencyCode">
+            <summary>The invoice currency code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.paymentMeansID">
+            <summary>The payment means ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.paymentMeansSchemeAgencyID">
+            <summary>The payment means scheme agency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.paymentMeansPayeeAccountIBAN">
+            <summary>The payment means payee account IBAN.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.paymentMeansPayeeAccountName">
+            <summary>The payment means payee account name.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.paymentMeansPayeeAccountProprietaryID">
+            <summary>The payment means payee account proprietary ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.paymentMeansPayeeFinancialInstitutionBIC">
+            <summary>The payment means payee financial institution BIC.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.paymentMeansPayeeFinancialInstitutionGermanBankleitzahlID">
+            <summary>The payment means payee financial institution german bankleitzahl ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.paymentMeansPayeeFinancialInstitutionName">
+            <summary>The payment means payee financial institution name.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.taxCalculatedAmount">
+            <summary>The tax calculated amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.taxCalculatedAmountCurrencyID">
+            <summary>The tax calculated amount currency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.taxTypeCode">
+            <summary>The tax type code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.taxBasisAmount">
+            <summary>The tax basis amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.taxBasisAmountCurrencyID">
+            <summary>The tax basis amount currency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.taxApplicablePercent">
+            <summary>The tax applicable percent.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.lineTotalAmount">
+            <summary>The line total amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.lineTotalAmountCurrencyID">
+            <summary>The line total amount currency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.chargeTotalAmount">
+            <summary>The charge total amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.chargeTotalAmountCurrencyID">
+            <summary>The charge total amount currency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.allowanceTotalAmount">
+            <summary>The allowance total amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.allowanceTotalAmountCurrencyID">
+            <summary>The allowance total amount currency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.taxBasisTotalAmount">
+            <summary>The tax basis total amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.taxBasisTotalAmountCurrencyID">
+            <summary>The tax basis total amount currency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.taxTotalAmount">
+            <summary>The tax total amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.taxTotalAmountCurrencyID">
+            <summary>The tax total amount currency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.grandTotalAmount">
+            <summary>The grand total amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.grandTotalAmountCurrencyID">
+            <summary>The grand total amount currency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.lineItemBilledQuantity">
+            <summary>The line item billed quantity.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.lineItemBilledQuantityUnitCode">
+            <summary>The line item billed quantity unit code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.BasicProfileImp.lineItemSpecifiedTradeProductName">
+            <summary>The line item specified trade product name.</summary>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.#ctor(System.Boolean)">
+            <summary>
+            Creates a new
+            <see cref="T:iText.Zugferd.Profiles.BasicProfileImp"/>
+            instance.
+            </summary>
+            <param name="testIndicator">
+            the parameter that determines whether a test invoice is going to be created.
+            The test indicator can be used when implementing a newly developed system. It is to mark the
+            invoice as a "test" and thus not leading to vat issues.
+            </param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetTest(System.Boolean)">
+            <summary>Sets the test.</summary>
+            <param name="test">the new test</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetId(System.String)">
+            <summary>Sets the id.</summary>
+            <param name="id">the new id</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetName(System.String)">
+            <summary>Sets the name.</summary>
+            <param name="name">the new name</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetTypeCode(System.String)">
+            <summary>Sets the type code.</summary>
+            <param name="typeCode">the new type code</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetDate(System.DateTime,System.String)">
+            <summary>Sets the date.</summary>
+            <param name="date">the date</param>
+            <param name="dateFormat">the date format</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.AddNote(System.String[])">
+            <summary>Adds the note.</summary>
+            <param name="note">the note</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetSellerName(System.String)">
+            <summary>Sets the seller name.</summary>
+            <param name="sellerName">the new seller name</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetSellerPostcode(System.String)">
+            <summary>Sets the seller postcode.</summary>
+            <param name="sellerPostcode">the new seller postcode</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetSellerLineOne(System.String)">
+            <summary>Sets the seller line one.</summary>
+            <param name="sellerLineOne">the new seller line one</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetSellerLineTwo(System.String)">
+            <summary>Sets the seller line two.</summary>
+            <param name="sellerLineTwo">the new seller line two</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetSellerCityName(System.String)">
+            <summary>Sets the seller city name.</summary>
+            <param name="sellerCityName">the new seller city name</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetSellerCountryID(System.String)">
+            <summary>Sets the seller country ID.</summary>
+            <param name="sellerCountryID">the new seller country ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.AddSellerTaxRegistration(System.String,System.String)">
+            <summary>Adds the seller tax registration.</summary>
+            <param name="schemeID">the scheme ID</param>
+            <param name="taxId">the tax id</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetBuyerName(System.String)">
+            <summary>Sets the buyer name.</summary>
+            <param name="buyerName">the new buyer name</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetBuyerPostcode(System.String)">
+            <summary>Sets the buyer postcode.</summary>
+            <param name="buyerPostcode">the new buyer postcode</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetBuyerLineOne(System.String)">
+            <summary>Sets the buyer line one.</summary>
+            <param name="buyerLineOne">the new buyer line one</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetBuyerLineTwo(System.String)">
+            <summary>Sets the buyer line two.</summary>
+            <param name="buyerLineTwo">the new buyer line two</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetBuyerCityName(System.String)">
+            <summary>Sets the buyer city name.</summary>
+            <param name="buyerCityName">the new buyer city name</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetBuyerCountryID(System.String)">
+            <summary>Sets the buyer country ID.</summary>
+            <param name="buyerCountryID">the new buyer country ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.AddBuyerTaxRegistration(System.String,System.String)">
+            <summary>Adds the buyer tax registration.</summary>
+            <param name="schemeID">the scheme ID</param>
+            <param name="taxId">the tax id</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetDeliveryDate(System.DateTime,System.String)">
+            <summary>Sets the delivery date.</summary>
+            <param name="deliveryDate">the delivery date</param>
+            <param name="deliveryDateFormat">the delivery date format</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetPaymentReference(System.String)">
+            <summary>Sets the payment reference.</summary>
+            <param name="paymentReference">the new payment reference</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetInvoiceCurrencyCode(System.String)">
+            <summary>Sets the invoice currency code.</summary>
+            <param name="invoiceCurrencyCode">the new invoice currency code</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.AddPaymentMeans(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>Adds the payment means.</summary>
+            <param name="schemeAgencyID">the scheme agency ID</param>
+            <param name="id">the id</param>
+            <param name="iban">the iban</param>
+            <param name="accountname">the accountname</param>
+            <param name="proprietaryID">the proprietary ID</param>
+            <param name="bic">the bic</param>
+            <param name="germanBankleitzahlID">the german bankleitzahl ID</param>
+            <param name="institutionname">the institutionname</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.AddApplicableTradeTax(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>Adds the applicable trade tax.</summary>
+            <param name="calculatedAmount">the calculated amount</param>
+            <param name="calculatedAmountCurrencyID">the calculated amount currency ID</param>
+            <param name="typeCode">the type code</param>
+            <param name="basisAmount">the basis amount</param>
+            <param name="basisAmountCurrencyID">the basis amount currency ID</param>
+            <param name="applicablePercent">the applicable percent</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.SetMonetarySummation(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>Sets the monetary summation.</summary>
+            <param name="lineTotalAmount">the line total amount</param>
+            <param name="lineTotalAmountCurrencyID">the line total amount currency ID</param>
+            <param name="chargeTotalAmount">the charge total amount</param>
+            <param name="chargeTotalAmountCurrencyID">the charge total amount currency ID</param>
+            <param name="allowanceTotalAmount">the allowance total amount</param>
+            <param name="allowanceTotalAmountCurrencyID">the allowance total amount currency ID</param>
+            <param name="taxBasisTotalAmount">the tax basis total amount</param>
+            <param name="taxBasisTotalAmountCurrencyID">the tax basis total amount currency ID</param>
+            <param name="taxTotalAmount">the tax total amount</param>
+            <param name="taxTotalAmountCurrencyID">the tax total amount currency ID</param>
+            <param name="grandTotalAmount">the grand total amount</param>
+            <param name="grandTotalAmountCurrencyID">the grand total amount currency ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.AddIncludedSupplyChainTradeLineItem(System.String,System.String,System.String)">
+            <summary>Adds the included supply chain trade line item.</summary>
+            <param name="billedQuantity">the billed quantity</param>
+            <param name="billedQuantityUnitCode">the billed quantity unit code</param>
+            <param name="specifiedTradeProductName">the specified trade product name</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.To1DArray(System.Collections.Generic.IList{System.String})">
+            <summary>To 1D array.</summary>
+            <param name="list">the list</param>
+            <returns>the string[]</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.To1DArrayB(System.Collections.Generic.IList{System.Boolean})">
+            <summary>To 1D array (for boolean values).</summary>
+            <param name="list">the list</param>
+            <returns>the boolean[]</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.To2DArray(System.Collections.Generic.IList{System.String[]})">
+            <summary>To 2D array.</summary>
+            <param name="list">the list</param>
+            <returns>the string[][]</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.To2DArrayB(System.Collections.Generic.IList{System.Boolean[]})">
+            <summary>To 2D array (for boolean values).</summary>
+            <param name="list">the list</param>
+            <returns>the boolean[][]</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.BasicProfileImp.To3DArray(System.Collections.Generic.IList{System.String[][]})">
+            <summary>To 3D array.</summary>
+            <param name="list">the list</param>
+            <returns>the string[][][]</returns>
+        </member>
+        <member name="T:iText.Zugferd.Profiles.ComfortProfileImp">
+            <summary>
+            This implementation of the BasicProfile contains member-variables that store
+            all the data needed to create an XML attachment for a ZUGFeRD invoice that
+            conforms with the Comfort profile.
+            </summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.notesCodes">
+            <summary>The notes codes.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.buyerReference">
+            <summary>The buyer reference.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.sellerID">
+            <summary>The seller ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.sellerGlobalID">
+            <summary>The seller global ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.sellerGlobalSchemeID">
+            <summary>The seller global scheme ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.buyerID">
+            <summary>The buyer ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.buyerGlobalID">
+            <summary>The buyer global ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.buyerGlobalSchemeID">
+            <summary>The buyer global scheme ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.buyerOrderReferencedDocumentIssueDateTime">
+            <summary>The buyer order referenced document issue date time.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.buyerOrderReferencedDocumentIssueDateTimeFormat">
+            <summary>The buyer order referenced document issue date time format.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.buyerOrderReferencedDocumentID">
+            <summary>The buyer order referenced document ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.contractReferencedDocumentIssueDateTime">
+            <summary>The contract referenced document issue date time.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.contractReferencedDocumentIssueDateTimeFormat">
+            <summary>The contract referenced document issue date time format.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.contractReferencedDocumentID">
+            <summary>The contract referenced document ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.customerOrderReferencedDocumentIssueDateTime">
+            <summary>The customer order referenced document issue date time.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.customerOrderReferencedDocumentIssueDateTimeFormat">
+            <summary>The customer order referenced document issue date time format.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.customerOrderReferencedDocumentID">
+            <summary>The customer order referenced document ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.deliveryNoteReferencedDocumentIssueDateTime">
+            <summary>The delivery note referenced document issue date time.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.deliveryNoteReferencedDocumentIssueDateTimeFormat">
+            <summary>The delivery note referenced document issue date time format.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.deliveryNoteReferencedDocumentID">
+            <summary>The delivery note referenced document ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.invoiceeID">
+            <summary>The invoicee ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.invoiceeGlobalID">
+            <summary>The invoicee global ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.invoiceeGlobalSchemeID">
+            <summary>The invoicee global scheme ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.invoiceeName">
+            <summary>The invoicee name.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.invoiceePostcode">
+            <summary>The invoicee postcode.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.invoiceeLineOne">
+            <summary>The invoicee line one.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.invoiceeLineTwo">
+            <summary>The invoicee line two.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.invoiceeCityName">
+            <summary>The invoicee city name.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.invoiceeCountryID">
+            <summary>The invoicee country ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.invoiceeTaxRegistrationID">
+            <summary>The invoicee tax registration ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.invoiceeTaxRegistrationSchemeID">
+            <summary>The invoicee tax registration scheme ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.paymentMeansTypeCode">
+            <summary>The payment means type code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.paymentMeansInformation">
+            <summary>The payment means information.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.paymentMeansPayerAccountIBAN">
+            <summary>The payment means payer account IBAN.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.paymentMeansPayerAccountProprietaryID">
+            <summary>The payment means payer account proprietary ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.paymentMeansPayerFinancialInstitutionBIC">
+            <summary>The payment means payer financial institution BIC.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.paymentMeansPayerFinancialInstitutionGermanBankleitzahlID">
+            <summary>The payment means payer financial institution german bankleitzahl ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.paymentMeansPayerFinancialInstitutionName">
+            <summary>The payment means payer financial institution name.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.taxExemptionReason">
+            <summary>The tax exemption reason.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.taxCategoryCode">
+            <summary>The tax category code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.billingStartDateTime">
+            <summary>The billing start date time.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.billingStartDateTimeFormat">
+            <summary>The billing start date time format.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.billingEndDateTime">
+            <summary>The billing end date time.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.billingEndDateTimeFormat">
+            <summary>The billing end date time format.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.tradeAllowanceChargeIndicator">
+            <summary>The trade allowance charge indicator.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.tradeAllowanceChargeActualAmount">
+            <summary>The trade allowance charge actual amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.tradeAllowanceChargeActualAmountCurrency">
+            <summary>The trade allowance charge actual amount currency.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.tradeAllowanceChargeReason">
+            <summary>The trade allowance charge reason.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.tradeAllowanceChargeTaxTypeCode">
+            <summary>The trade allowance charge tax type code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.tradeAllowanceChargeTaxCategoryCode">
+            <summary>The trade allowance charge tax category code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.tradeAllowanceChargeTaxApplicablePercent">
+            <summary>The trade allowance charge tax applicable percent.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.logisticsServiceChargeDescription">
+            <summary>The logistics service charge description.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.logisticsServiceChargeAmount">
+            <summary>The logistics service charge amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.logisticsServiceChargeAmountCurrency">
+            <summary>The logistics service charge amount currency.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.logisticsServiceChargeTaxTypeCode">
+            <summary>The logistics service charge tax type code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.logisticsServiceChargeTaxCategoryCode">
+            <summary>The logistics service charge tax category code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.logisticsServiceChargeTaxApplicablePercent">
+            <summary>The logistics service charge tax applicable percent.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.tradePaymentTermsInformation">
+            <summary>The trade payment terms information.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.tradePaymentTermsDueDateTime">
+            <summary>The trade payment terms due date time.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.tradePaymentTermsDueDateTimeFormat">
+            <summary>The trade payment terms due date time format.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.totalPrepaidAmount">
+            <summary>The total prepaid amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.totalPrepaidAmountCurrencyID">
+            <summary>The total prepaid amount currency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.duePayableAmount">
+            <summary>The due payable amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.duePayableAmountCurrencyID">
+            <summary>The due payable amount currency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemLineID">
+            <summary>The line item line ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemIncludedNote">
+            <summary>The line item included note.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemGrossPriceChargeAmount">
+            <summary>The line item gross price charge amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemGrossPriceChargeAmountCurrencyID">
+            <summary>The line item gross price charge amount currency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemGrossPriceBasisQuantity">
+            <summary>The line item gross price basis quantity.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemGrossPriceBasisQuantityCode">
+            <summary>The line item gross price basis quantity code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemGrossPriceTradeAllowanceChargeIndicator">
+            <summary>The line item gross price trade allowance charge indicator.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemGrossPriceTradeAllowanceChargeActualAmount">
+            <summary>The line item gross price trade allowance charge actual amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemGrossPriceTradeAllowanceChargeActualAmountCurrencyID">
+            <summary>The line item gross price trade allowance charge actual amount currency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemGrossPriceTradeAllowanceChargeReason">
+            <summary>The line item gross price trade allowance charge reason.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemNetPriceChargeAmount">
+            <summary>The line item net price charge amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemNetPriceChargeAmountCurrencyID">
+            <summary>The line item net price charge amount currency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemNetPriceBasisQuantity">
+            <summary>The line item net price basis quantity.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemNetPriceBasisQuantityCode">
+            <summary>The line item net price basis quantity code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemSettlementTaxTypeCode">
+            <summary>The line item settlement tax type code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemSettlementTaxExemptionReason">
+            <summary>The line item settlement tax exemption reason.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemSettlementTaxCategoryCode">
+            <summary>The line item settlement tax category code.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemSettlementTaxApplicablePercent">
+            <summary>The line item settlement tax applicable percent.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemLineTotalAmount">
+            <summary>The line item line total amount.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemLineTotalAmountCurrencyID">
+            <summary>The line item line total amount currency ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemSpecifiedTradeProductGlobalID">
+            <summary>The line item specified trade product global ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemSpecifiedTradeProductSchemeID">
+            <summary>The line item specified trade product scheme ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemSpecifiedTradeProductSellerAssignedID">
+            <summary>The line item specified trade product seller assigned ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemSpecifiedTradeProductBuyerAssignedID">
+            <summary>The line item specified trade product buyer assigned ID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Profiles.ComfortProfileImp.lineItemSpecifiedTradeProductDescription">
+            <summary>The line item specified trade product description.</summary>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.#ctor(System.Boolean)">
+            <summary>
+            Creates a new
+            <see cref="T:iText.Zugferd.Profiles.ComfortProfileImp"/>
+            instance.
+            </summary>
+            <param name="testIndicator">
+            the parameter that determines whether a test invoice is going to be created.
+            The test indicator can be used when implementing a newly developed system. It is to mark the
+            invoice as a "test" and thus not leading to vat issues.
+            </param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.AddNote(System.String[],System.String)">
+            <summary>Adds the note.</summary>
+            <param name="note">the note</param>
+            <param name="code">the code</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetBuyerReference(System.String)">
+            <summary>Sets the buyer reference.</summary>
+            <param name="buyerReference">the new buyer reference</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetSellerID(System.String)">
+            <summary>Sets the seller ID.</summary>
+            <param name="sellerID">the new seller ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.AddSellerGlobalID(System.String,System.String)">
+            <summary>Adds the seller global ID.</summary>
+            <param name="sellerGlobalSchemeID">the seller global scheme ID</param>
+            <param name="sellerGlobalID">the seller global ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetBuyerID(System.String)">
+            <summary>Sets the buyer ID.</summary>
+            <param name="buyerID">the new buyer ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.AddBuyerGlobalID(System.String,System.String)">
+            <summary>Adds the buyer global ID.</summary>
+            <param name="buyerGlobalSchemeID">the buyer global scheme ID</param>
+            <param name="buyerGlobalID">the buyer global ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetBuyerOrderReferencedDocumentIssueDateTime(System.DateTime,System.String)">
+            <summary>Sets the buyer order referenced document issue date time.</summary>
+            <param name="buyerOrderReferencedDocumentIssueDateTime">the buyer order referenced document issue date time
+                </param>
+            <param name="buyerOrderReferencedDocumentIssueDateTimeFormat">the buyer order referenced document issue date time format
+                </param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetBuyerOrderReferencedDocumentID(System.String)">
+            <summary>Sets the buyer order referenced document ID.</summary>
+            <param name="buyerOrderReferencedDocumentID">the new buyer order referenced document ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetContractReferencedDocumentIssueDateTime(System.DateTime,System.String)">
+            <summary>Sets the contract referenced document issue date time.</summary>
+            <param name="contractReferencedDocumentIssueDateTime">the contract referenced document issue date time</param>
+            <param name="contractReferencedDocumentIssueDateTimeFormat">the contract referenced document issue date time format
+                </param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetContractReferencedDocumentID(System.String)">
+            <summary>Sets the contract referenced document ID.</summary>
+            <param name="contractReferencedDocumentID">the new contract referenced document ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetCustomerOrderReferencedDocumentIssueDateTime(System.DateTime,System.String)">
+            <summary>Sets the customer order referenced document issue date time.</summary>
+            <param name="customerOrderReferencedDocumentIssueDateTime">the customer order referenced document issue date time
+                </param>
+            <param name="customerOrderReferencedDocumentIssueDateTimeFormat">the customer order referenced document issue date time format
+                </param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetCustomerOrderReferencedDocumentID(System.String)">
+            <summary>Sets the customer order referenced document ID.</summary>
+            <param name="customerOrderReferencedDocumentID">the new customer order referenced document ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetDeliveryNoteReferencedDocumentIssueDateTime(System.DateTime,System.String)">
+            <summary>Sets the delivery note referenced document issue date time.</summary>
+            <param name="deliveryNoteReferencedDocumentIssueDateTime">the delivery note referenced document issue date time
+                </param>
+            <param name="deliveryNoteReferencedDocumentIssueDateTimeFormat">the delivery note referenced document issue date time format
+                </param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetDeliveryNoteReferencedDocumentID(System.String)">
+            <summary>Sets the delivery note referenced document ID.</summary>
+            <param name="deliveryNoteReferencedDocumentID">the new delivery note referenced document ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetInvoiceeID(System.String)">
+            <summary>Sets the invoicee ID.</summary>
+            <param name="invoiceeID">the new invoicee ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.AddInvoiceeGlobalID(System.String,System.String)">
+            <summary>Adds the invoicee global ID.</summary>
+            <param name="invoiceeGlobalSchemeID">the invoicee global scheme ID</param>
+            <param name="invoiceeGlobalID">the invoicee global ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetInvoiceeName(System.String)">
+            <summary>Sets the invoicee name.</summary>
+            <param name="invoiceeName">the new invoicee name</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetInvoiceePostcode(System.String)">
+            <summary>Sets the invoicee postcode.</summary>
+            <param name="invoiceePostcode">the new invoicee postcode</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetInvoiceeLineOne(System.String)">
+            <summary>Sets the invoicee line one.</summary>
+            <param name="invoiceeLineOne">the new invoicee line one</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetInvoiceeLineTwo(System.String)">
+            <summary>Sets the invoicee line two.</summary>
+            <param name="invoiceeLineTwo">the new invoicee line two</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetInvoiceeCityName(System.String)">
+            <summary>Sets the invoicee city name.</summary>
+            <param name="invoiceeCityName">the new invoicee city name</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetInvoiceeCountryID(System.String)">
+            <summary>Sets the invoicee country ID.</summary>
+            <param name="invoiceeCountryID">the new invoicee country ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.AddInvoiceeTaxRegistration(System.String,System.String)">
+            <summary>Adds the invoicee tax registration.</summary>
+            <param name="schemeID">the scheme ID</param>
+            <param name="taxId">the tax id</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.AddPaymentMeans(System.String,System.String[],System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>Adds the payment means.</summary>
+            <param name="typeCode">the type code</param>
+            <param name="information">the information</param>
+            <param name="schemeAgencyID">the scheme agency ID</param>
+            <param name="id">the id</param>
+            <param name="ibanDebtor">the iban debtor</param>
+            <param name="proprietaryIDDebtor">the proprietary ID debtor</param>
+            <param name="ibanCreditor">the iban creditor</param>
+            <param name="accountnameCreditor">the accountname creditor</param>
+            <param name="proprietaryIDCreditor">the proprietary ID creditor</param>
+            <param name="bicDebtor">the bic debtor</param>
+            <param name="germanBankleitzahlIDDebtor">the german bankleitzahl ID debtor</param>
+            <param name="institutionnameDebtor">the institutionname debtor</param>
+            <param name="bicCreditor">the bic creditor</param>
+            <param name="germanBankleitzahlIDCreditor">the german bankleitzahl ID creditor</param>
+            <param name="institutionnameCreditor">the institutionname creditor</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.AddApplicableTradeTax(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>Adds the applicable trade tax.</summary>
+            <param name="calculatedAmount">the calculated amount</param>
+            <param name="calculatedAmountCurrencyID">the calculated amount currency ID</param>
+            <param name="typeCode">the type code</param>
+            <param name="exemptionReason">the exemption reason</param>
+            <param name="basisAmount">the basis amount</param>
+            <param name="basisAmountCurrencyID">the basis amount currency ID</param>
+            <param name="categoryCode">the category code</param>
+            <param name="applicablePercent">the applicable percent</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetBillingStartEnd(System.DateTime,System.String,System.DateTime,System.String)">
+            <summary>Sets the billing start end.</summary>
+            <param name="billingStartDateTime">the billing start date time</param>
+            <param name="billingStartDateTimeFormat">the billing start date time format</param>
+            <param name="billingEndDateTime">the billing end date time</param>
+            <param name="billingEndDateTimeFormat">the billing end date time format</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.AddSpecifiedTradeAllowanceCharge(System.Boolean,System.String,System.String,System.String,System.String[],System.String[],System.String[])">
+            <summary>Adds the specified trade allowance charge.</summary>
+            <param name="indicator">the indicator</param>
+            <param name="actualAmount">the actual amount</param>
+            <param name="actualAmountCurrency">the actual amount currency</param>
+            <param name="reason">the reason</param>
+            <param name="typeCodes">the type codes</param>
+            <param name="categoryCodes">the category codes</param>
+            <param name="applicablePercent">the applicable percent</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.AddSpecifiedLogisticsServiceCharge(System.String[],System.String,System.String,System.String[],System.String[],System.String[])">
+            <summary>Adds the specified logistics service charge.</summary>
+            <param name="description">the description</param>
+            <param name="actualAmount">the actual amount</param>
+            <param name="actualAmountCurrency">the actual amount currency</param>
+            <param name="typeCodes">the type codes</param>
+            <param name="categoryCodes">the category codes</param>
+            <param name="applicablePercent">the applicable percent</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.AddSpecifiedTradePaymentTerms(System.String[],System.DateTime,System.String)">
+            <summary>Adds the specified trade payment terms.</summary>
+            <param name="information">the information</param>
+            <param name="dateTime">the date time</param>
+            <param name="dateTimeFormat">the date time format</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetTotalPrepaidAmount(System.String,System.String)">
+            <summary>Sets the total prepaid amount.</summary>
+            <param name="totalPrepaidAmount">the total prepaid amount</param>
+            <param name="totalPrepaidCurrencyID">the total prepaid currency ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.SetDuePayableAmount(System.String,System.String)">
+            <summary>Sets the due payable amount.</summary>
+            <param name="duePayableAmount">the due payable amount</param>
+            <param name="duePayableAmountCurrencyID">the due payable amount currency ID</param>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.ComfortProfileImp.AddIncludedSupplyChainTradeLineItem(System.String,System.String[][],System.String,System.String,System.String,System.String,System.Boolean[],System.String[],System.String[],System.String[],System.String,System.String,System.String,System.String,System.String,System.String,System.String[],System.String[],System.String[],System.String[],System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>Adds the included supply chain trade line item.</summary>
+            <param name="id">the id</param>
+            <param name="notes">the notes</param>
+            <param name="grossPriceChargeAmount">the gross price charge amount</param>
+            <param name="grossPriceChargeAmountCurrencyID">the gross price charge amount currency ID</param>
+            <param name="grossPriceBasisQuantity">the gross price basis quantity</param>
+            <param name="grossPriceBasisQuantityCode">the gross price basis quantity code</param>
+            <param name="grossPriceTradeAllowanceChargeIndicator">the gross price trade allowance charge indicator</param>
+            <param name="grossPriceTradeAllowanceChargeActualAmount">the gross price trade allowance charge actual amount
+                </param>
+            <param name="grossPriceTradeAllowanceChargeActualAmountCurrencyID">the gross price trade allowance charge actual amount currency ID
+                </param>
+            <param name="grossPriceTradeAllowanceChargeReason">the gross price trade allowance charge reason</param>
+            <param name="netPriceChargeAmount">the net price charge amount</param>
+            <param name="netPriceChargeAmountCurrencyID">the net price charge amount currency ID</param>
+            <param name="netPriceBasisQuantity">the net price basis quantity</param>
+            <param name="netPriceBasisQuantityCode">the net price basis quantity code</param>
+            <param name="billedQuantity">the billed quantity</param>
+            <param name="billedQuantityUnitCode">the billed quantity unit code</param>
+            <param name="lineItemSettlementTaxTypeCode">the line item settlement tax type code</param>
+            <param name="lineItemSettlementTaxExemptionReason">the line item settlement tax exemption reason</param>
+            <param name="lineItemSettlementTaxCategoryCode">the line item settlement tax category code</param>
+            <param name="lineItemSettlementTaxApplicablePercent">the line item settlement tax applicable percent</param>
+            <param name="lineItemLineTotalAmount">the line item line total amount</param>
+            <param name="lineItemLineTotalAmountCurrencyID">the line item line total amount currency ID</param>
+            <param name="lineItemSpecifiedTradeProductGlobalID">the line item specified trade product global ID</param>
+            <param name="lineItemSpecifiedTradeProductSchemeID">the line item specified trade product scheme ID</param>
+            <param name="lineItemSpecifiedTradeProductSellerAssignedID">the line item specified trade product seller assigned ID
+                </param>
+            <param name="lineItemSpecifiedTradeProductBuyerAssignedID">the line item specified trade product buyer assigned ID
+                </param>
+            <param name="lineItemSpecifiedTradeProductName">the line item specified trade product name</param>
+            <param name="lineItemSpecifiedTradeProductDescription">the line item specified trade product description</param>
+        </member>
+        <member name="T:iText.Zugferd.Profiles.IBasicProfile">
+            <summary>
+            If you implement this interface correctly, you provide all the data that
+            is necessary for iText to create an XML that can be used in a ZUGFeRD
+            invoice that conforms with the Basic profile.
+            </summary>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetTestIndicator">
+            <summary>Gets the test indicator.</summary>
+            <returns>the test indicator</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetId">
+            <summary>Gets the id.</summary>
+            <returns>the id</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetName">
+            <summary>Gets the name.</summary>
+            <returns>the name</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetTypeCode">
+            <summary>Gets the type code.</summary>
+            <returns>the type code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetDateTime">
+            <summary>Gets the date time.</summary>
+            <returns>the date time</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetDateTimeFormat">
+            <summary>Gets the date time format.</summary>
+            <returns>the date time format</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetNotes">
+            <summary>Gets the notes.</summary>
+            <returns>the notes</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetSellerName">
+            <summary>Gets the seller name.</summary>
+            <returns>the seller name</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetSellerPostcode">
+            <summary>Gets the seller postcode.</summary>
+            <returns>the seller postcode</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetSellerLineOne">
+            <summary>Gets the seller line one.</summary>
+            <returns>the seller line one</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetSellerLineTwo">
+            <summary>Gets the seller line two.</summary>
+            <returns>the seller line two</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetSellerCityName">
+            <summary>Gets the seller city name.</summary>
+            <returns>the seller city name</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetSellerCountryID">
+            <summary>Gets the seller country ID.</summary>
+            <returns>the seller country ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetSellerTaxRegistrationID">
+            <summary>Gets the seller tax registration ID.</summary>
+            <returns>the seller tax registration ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetSellerTaxRegistrationSchemeID">
+            <summary>Gets the seller tax registration scheme ID.</summary>
+            <returns>the seller tax registration scheme ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetBuyerName">
+            <summary>Gets the buyer name.</summary>
+            <returns>the buyer name</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetBuyerPostcode">
+            <summary>Gets the buyer postcode.</summary>
+            <returns>the buyer postcode</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetBuyerLineOne">
+            <summary>Gets the buyer line one.</summary>
+            <returns>the buyer line one</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetBuyerLineTwo">
+            <summary>Gets the buyer line two.</summary>
+            <returns>the buyer line two</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetBuyerCityName">
+            <summary>Gets the buyer city name.</summary>
+            <returns>the buyer city name</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetBuyerCountryID">
+            <summary>Gets the buyer country ID.</summary>
+            <returns>the buyer country ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetBuyerTaxRegistrationID">
+            <summary>Gets the buyer tax registration ID.</summary>
+            <returns>the buyer tax registration ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetBuyerTaxRegistrationSchemeID">
+            <summary>Gets the buyer tax registration scheme ID.</summary>
+            <returns>the buyer tax registration scheme ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetDeliveryDateTime">
+            <summary>Gets the delivery date time.</summary>
+            <returns>the delivery date time</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetDeliveryDateTimeFormat">
+            <summary>Gets the delivery date time format.</summary>
+            <returns>the delivery date time format</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetPaymentReference">
+            <summary>Gets the payment reference.</summary>
+            <returns>the payment reference</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetInvoiceCurrencyCode">
+            <summary>Gets the invoice currency code.</summary>
+            <returns>the invoice currency code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetPaymentMeansID">
+            <summary>Gets the payment means ID.</summary>
+            <returns>the payment means ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetPaymentMeansSchemeAgencyID">
+            <summary>Gets the payment means scheme agency ID.</summary>
+            <returns>the payment means scheme agency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetPaymentMeansPayeeAccountIBAN">
+            <summary>Gets the payment means payee account IBAN.</summary>
+            <returns>the payment means payee account IBAN</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetPaymentMeansPayeeAccountAccountName">
+            <summary>Gets the payment means payee account account name.</summary>
+            <returns>the payment means payee account account name</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetPaymentMeansPayeeAccountProprietaryID">
+            <summary>Gets the payment means payee account proprietary ID.</summary>
+            <returns>the payment means payee account proprietary ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetPaymentMeansPayeeFinancialInstitutionBIC">
+            <summary>Gets the payment means payee financial institution BIC.</summary>
+            <returns>the payment means payee financial institution BIC</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetPaymentMeansPayeeFinancialInstitutionGermanBankleitzahlID">
+            <summary>Gets the payment means payee financial institution german bankleitzahl ID.</summary>
+            <returns>the payment means payee financial institution german bankleitzahl ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetPaymentMeansPayeeFinancialInstitutionName">
+            <summary>Gets the payment means payee financial institution name.</summary>
+            <returns>the payment means payee financial institution name</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetTaxCalculatedAmount">
+            <summary>Gets the tax calculated amount.</summary>
+            <returns>the tax calculated amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetTaxCalculatedAmountCurrencyID">
+            <summary>Gets the tax calculated amount currency ID.</summary>
+            <returns>the tax calculated amount currency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetTaxTypeCode">
+            <summary>Gets the tax type code.</summary>
+            <returns>the tax type code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetTaxBasisAmount">
+            <summary>Gets the tax basis amount.</summary>
+            <returns>the tax basis amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetTaxBasisAmountCurrencyID">
+            <summary>Gets the tax basis amount currency ID.</summary>
+            <returns>the tax basis amount currency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetTaxApplicablePercent">
+            <summary>Gets the tax applicable percent.</summary>
+            <returns>the tax applicable percent</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetLineTotalAmount">
+            <summary>Gets the line total amount.</summary>
+            <returns>the line total amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetLineTotalAmountCurrencyID">
+            <summary>Gets the line total amount currency ID.</summary>
+            <returns>the line total amount currency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetChargeTotalAmount">
+            <summary>Gets the charge total amount.</summary>
+            <returns>the charge total amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetChargeTotalAmountCurrencyID">
+            <summary>Gets the charge total amount currency ID.</summary>
+            <returns>the charge total amount currency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetAllowanceTotalAmount">
+            <summary>Gets the allowance total amount.</summary>
+            <returns>the allowance total amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetAllowanceTotalAmountCurrencyID">
+            <summary>Gets the allowance total amount currency ID.</summary>
+            <returns>the allowance total amount currency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetTaxBasisTotalAmount">
+            <summary>Gets the tax basis total amount.</summary>
+            <returns>the tax basis total amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetTaxBasisTotalAmountCurrencyID">
+            <summary>Gets the tax basis total amount currency ID.</summary>
+            <returns>the tax basis total amount currency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetTaxTotalAmount">
+            <summary>Gets the tax total amount.</summary>
+            <returns>the tax total amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetTaxTotalAmountCurrencyID">
+            <summary>Gets the tax total amount currency ID.</summary>
+            <returns>the tax total amount currency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetGrandTotalAmount">
+            <summary>Gets the grand total amount.</summary>
+            <returns>the grand total amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetGrandTotalAmountCurrencyID">
+            <summary>Gets the grand total amount currency ID.</summary>
+            <returns>the grand total amount currency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetLineItemBilledQuantity">
+            <summary>Gets the line item billed quantity.</summary>
+            <returns>the line item billed quantity</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetLineItemBilledQuantityUnitCode">
+            <summary>Gets the line item billed quantity unit code.</summary>
+            <returns>the line item billed quantity unit code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IBasicProfile.GetLineItemSpecifiedTradeProductName">
+            <summary>Gets the line item specified trade product name.</summary>
+            <returns>the line item specified trade product name</returns>
+        </member>
+        <member name="T:iText.Zugferd.Profiles.IComfortProfile">
+            <summary>
+            If you implement this interface correctly, you provide all the data that
+            is necessary for iText to create an XML that can be used in a ZUGFeRD
+            invoice that conforms with the Comfort profile.
+            </summary>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetNotesCodes">
+            <summary>Gets the notes codes.</summary>
+            <returns>the notes codes</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetBuyerReference">
+            <summary>Gets the buyer reference.</summary>
+            <returns>the buyer reference</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSellerID">
+            <summary>Gets the seller ID.</summary>
+            <returns>the seller ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSellerGlobalID">
+            <summary>Gets the seller global ID.</summary>
+            <returns>the seller global ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSellerGlobalSchemeID">
+            <summary>Gets the seller global scheme ID.</summary>
+            <returns>the seller global scheme ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetBuyerID">
+            <summary>Gets the buyer ID.</summary>
+            <returns>the buyer ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetBuyerGlobalID">
+            <summary>Gets the buyer global ID.</summary>
+            <returns>the buyer global ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetBuyerGlobalSchemeID">
+            <summary>Gets the buyer global scheme ID.</summary>
+            <returns>the buyer global scheme ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetBuyerOrderReferencedDocumentIssueDateTime">
+            <summary>Gets the buyer order referenced document issue date time.</summary>
+            <returns>the buyer order referenced document issue date time</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetBuyerOrderReferencedDocumentIssueDateTimeFormat">
+            <summary>Gets the buyer order referenced document issue date time format.</summary>
+            <returns>the buyer order referenced document issue date time format</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetBuyerOrderReferencedDocumentID">
+            <summary>Gets the buyer order referenced document ID.</summary>
+            <returns>the buyer order referenced document ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetContractReferencedDocumentIssueDateTime">
+            <summary>Gets the contract referenced document issue date time.</summary>
+            <returns>the contract referenced document issue date time</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetContractReferencedDocumentIssueDateTimeFormat">
+            <summary>Gets the contract referenced document issue date time format.</summary>
+            <returns>the contract referenced document issue date time format</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetContractReferencedDocumentID">
+            <summary>Gets the contract referenced document ID.</summary>
+            <returns>the contract referenced document ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetCustomerOrderReferencedDocumentIssueDateTime">
+            <summary>Gets the customer order referenced document issue date time.</summary>
+            <returns>the customer order referenced document issue date time</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetCustomerOrderReferencedDocumentIssueDateTimeFormat">
+            <summary>Gets the customer order referenced document issue date time format.</summary>
+            <returns>the customer order referenced document issue date time format</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetCustomerOrderReferencedDocumentID">
+            <summary>Gets the customer order referenced document ID.</summary>
+            <returns>the customer order referenced document ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetDeliveryNoteReferencedDocumentIssueDateTime">
+            <summary>Gets the delivery note referenced document issue date time.</summary>
+            <returns>the delivery note referenced document issue date time</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetDeliveryNoteReferencedDocumentIssueDateTimeFormat">
+            <summary>Gets the delivery note referenced document issue date time format.</summary>
+            <returns>the delivery note referenced document issue date time format</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetDeliveryNoteReferencedDocumentID">
+            <summary>Gets the delivery note referenced document ID.</summary>
+            <returns>the delivery note referenced document ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetInvoiceeID">
+            <summary>Gets the invoicee ID.</summary>
+            <returns>the invoicee ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetInvoiceeGlobalID">
+            <summary>Gets the invoicee global ID.</summary>
+            <returns>the invoicee global ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetInvoiceeGlobalSchemeID">
+            <summary>Gets the invoicee global scheme ID.</summary>
+            <returns>the invoicee global scheme ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetInvoiceeName">
+            <summary>Gets the invoicee name.</summary>
+            <returns>the invoicee name</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetInvoiceePostcode">
+            <summary>Gets the invoicee postcode.</summary>
+            <returns>the invoicee postcode</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetInvoiceeLineOne">
+            <summary>Gets the invoicee line one.</summary>
+            <returns>the invoicee line one</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetInvoiceeLineTwo">
+            <summary>Gets the invoicee line two.</summary>
+            <returns>the invoicee line two</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetInvoiceeCityName">
+            <summary>Gets the invoicee city name.</summary>
+            <returns>the invoicee city name</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetInvoiceeCountryID">
+            <summary>Gets the invoicee country ID.</summary>
+            <returns>the invoicee country ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetInvoiceeTaxRegistrationID">
+            <summary>Gets the invoicee tax registration ID.</summary>
+            <returns>the invoicee tax registration ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetInvoiceeTaxRegistrationSchemeID">
+            <summary>Gets the invoicee tax registration scheme ID.</summary>
+            <returns>the invoicee tax registration scheme ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetPaymentMeansTypeCode">
+            <summary>Gets the payment means type code.</summary>
+            <returns>the payment means type code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetPaymentMeansInformation">
+            <summary>Gets the payment means information.</summary>
+            <returns>the payment means information</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetPaymentMeansPayerAccountIBAN">
+            <summary>Gets the payment means payer account IBAN.</summary>
+            <returns>the payment means payer account IBAN</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetPaymentMeansPayerAccountProprietaryID">
+            <summary>Gets the payment means payer account proprietary ID.</summary>
+            <returns>the payment means payer account proprietary ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetPaymentMeansPayerFinancialInstitutionBIC">
+            <summary>Gets the payment means payer financial institution BIC.</summary>
+            <returns>the payment means payer financial institution BIC</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetPaymentMeansPayerFinancialInstitutionGermanBankleitzahlID">
+            <summary>Gets the payment means payer financial institution german bankleitzahl ID.</summary>
+            <returns>the payment means payer financial institution german bankleitzahl ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetPaymentMeansPayerFinancialInstitutionName">
+            <summary>Gets the payment means payer financial institution name.</summary>
+            <returns>the payment means payer financial institution name</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetTaxExemptionReason">
+            <summary>Gets the tax exemption reason.</summary>
+            <returns>the tax exemption reason</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetTaxCategoryCode">
+            <summary>Gets the tax category code.</summary>
+            <returns>the tax category code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetBillingStartDateTime">
+            <summary>Gets the billing start date time.</summary>
+            <returns>the billing start date time</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetBillingStartDateTimeFormat">
+            <summary>Gets the billing start date time format.</summary>
+            <returns>the billing start date time format</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetBillingEndDateTime">
+            <summary>Gets the billing end date time.</summary>
+            <returns>the billing end date time</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetBillingEndDateTimeFormat">
+            <summary>Gets the billing end date time format.</summary>
+            <returns>the billing end date time format</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedTradeAllowanceChargeIndicator">
+            <summary>Gets the specified trade allowance charge indicator.</summary>
+            <returns>the specified trade allowance charge indicator</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedTradeAllowanceChargeActualAmount">
+            <summary>Gets the specified trade allowance charge actual amount.</summary>
+            <returns>the specified trade allowance charge actual amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedTradeAllowanceChargeActualAmountCurrency">
+            <summary>Gets the specified trade allowance charge actual amount currency.</summary>
+            <returns>the specified trade allowance charge actual amount currency</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedTradeAllowanceChargeReason">
+            <summary>Gets the specified trade allowance charge reason.</summary>
+            <returns>the specified trade allowance charge reason</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedTradeAllowanceChargeTaxTypeCode">
+            <summary>Gets the specified trade allowance charge tax type code.</summary>
+            <returns>the specified trade allowance charge tax type code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedTradeAllowanceChargeTaxCategoryCode">
+            <summary>Gets the specified trade allowance charge tax category code.</summary>
+            <returns>the specified trade allowance charge tax category code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedTradeAllowanceChargeTaxApplicablePercent">
+            <summary>Gets the specified trade allowance charge tax applicable percent.</summary>
+            <returns>the specified trade allowance charge tax applicable percent</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedLogisticsServiceChargeDescription">
+            <summary>Gets the specified logistics service charge description.</summary>
+            <returns>the specified logistics service charge description</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedLogisticsServiceChargeAmount">
+            <summary>Gets the specified logistics service charge amount.</summary>
+            <returns>the specified logistics service charge amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedLogisticsServiceChargeAmountCurrency">
+            <summary>Gets the specified logistics service charge amount currency.</summary>
+            <returns>the specified logistics service charge amount currency</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedLogisticsServiceChargeTaxTypeCode">
+            <summary>Gets the specified logistics service charge tax type code.</summary>
+            <returns>the specified logistics service charge tax type code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedLogisticsServiceChargeTaxCategoryCode">
+            <summary>Gets the specified logistics service charge tax category code.</summary>
+            <returns>the specified logistics service charge tax category code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedLogisticsServiceChargeTaxApplicablePercent">
+            <summary>Gets the specified logistics service charge tax applicable percent.</summary>
+            <returns>the specified logistics service charge tax applicable percent</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedTradePaymentTermsDescription">
+            <summary>Gets the specified trade payment terms description.</summary>
+            <returns>the specified trade payment terms description</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedTradePaymentTermsDueDateTime">
+            <summary>Gets the specified trade payment terms due date time.</summary>
+            <returns>the specified trade payment terms due date time</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetSpecifiedTradePaymentTermsDueDateTimeFormat">
+            <summary>Gets the specified trade payment terms due date time format.</summary>
+            <returns>the specified trade payment terms due date time format</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetTotalPrepaidAmount">
+            <summary>Gets the total prepaid amount.</summary>
+            <returns>the total prepaid amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetTotalPrepaidAmountCurrencyID">
+            <summary>Gets the total prepaid amount currency ID.</summary>
+            <returns>the total prepaid amount currency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetDuePayableAmount">
+            <summary>Gets the due payable amount.</summary>
+            <returns>the due payable amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetDuePayableAmountCurrencyID">
+            <summary>Gets the due payable amount currency ID.</summary>
+            <returns>the due payable amount currency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemLineID">
+            <summary>Gets the line item line ID.</summary>
+            <returns>the line item line ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemIncludedNote">
+            <summary>Gets the line item included note.</summary>
+            <returns>the line item included note</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemGrossPriceChargeAmount">
+            <summary>Gets the line item gross price charge amount.</summary>
+            <returns>the line item gross price charge amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemGrossPriceChargeAmountCurrencyID">
+            <summary>Gets the line item gross price charge amount currency ID.</summary>
+            <returns>the line item gross price charge amount currency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemGrossPriceBasisQuantity">
+            <summary>Gets the line item gross price basis quantity.</summary>
+            <returns>the line item gross price basis quantity</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemGrossPriceBasisQuantityCode">
+            <summary>Gets the line item gross price basis quantity code.</summary>
+            <returns>the line item gross price basis quantity code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemGrossPriceTradeAllowanceChargeIndicator">
+            <summary>Gets the line item gross price trade allowance charge indicator.</summary>
+            <returns>the line item gross price trade allowance charge indicator</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemGrossPriceTradeAllowanceChargeActualAmount">
+            <summary>Gets the line item gross price trade allowance charge actual amount.</summary>
+            <returns>the line item gross price trade allowance charge actual amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemGrossPriceTradeAllowanceChargeActualAmountCurrencyID">
+            <summary>Gets the line item gross price trade allowance charge actual amount currency ID.</summary>
+            <returns>the line item gross price trade allowance charge actual amount currency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemGrossPriceTradeAllowanceChargeReason">
+            <summary>Gets the line item gross price trade allowance charge reason.</summary>
+            <returns>the line item gross price trade allowance charge reason</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemNetPriceChargeAmount">
+            <summary>Gets the line item net price charge amount.</summary>
+            <returns>the line item net price charge amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemNetPriceChargeAmountCurrencyID">
+            <summary>Gets the line item net price charge amount currency ID.</summary>
+            <returns>the line item net price charge amount currency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemNetPriceBasisQuantity">
+            <summary>Gets the line item net price basis quantity.</summary>
+            <returns>the line item net price basis quantity</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemNetPriceBasisQuantityCode">
+            <summary>Gets the line item net price basis quantity code.</summary>
+            <returns>the line item net price basis quantity code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemSettlementTaxTypeCode">
+            <summary>Gets the line item settlement tax type code.</summary>
+            <returns>the line item settlement tax type code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemSettlementTaxExemptionReason">
+            <summary>Gets the line item settlement tax exemption reason.</summary>
+            <returns>the line item settlement tax exemption reason</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemSettlementTaxCategoryCode">
+            <summary>Gets the line item settlement tax category code.</summary>
+            <returns>the line item settlement tax category code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemSettlementTaxApplicablePercent">
+            <summary>Gets the line item settlement tax applicable percent.</summary>
+            <returns>the line item settlement tax applicable percent</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemLineTotalAmount">
+            <summary>Gets the line item line total amount.</summary>
+            <returns>the line item line total amount</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemLineTotalAmountCurrencyID">
+            <summary>Gets the line item line total amount currency ID.</summary>
+            <returns>the line item line total amount currency ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemSpecifiedTradeProductGlobalID">
+            <summary>Gets the line item specified trade product global ID.</summary>
+            <returns>the line item specified trade product global ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemSpecifiedTradeProductSchemeID">
+            <summary>Gets the line item specified trade product scheme ID.</summary>
+            <returns>the line item specified trade product scheme ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemSpecifiedTradeProductSellerAssignedID">
+            <summary>Gets the line item specified trade product seller assigned ID.</summary>
+            <returns>the line item specified trade product seller assigned ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemSpecifiedTradeProductBuyerAssignedID">
+            <summary>Gets the line item specified trade product buyer assigned ID.</summary>
+            <returns>the line item specified trade product buyer assigned ID</returns>
+        </member>
+        <member name="M:iText.Zugferd.Profiles.IComfortProfile.GetLineItemSpecifiedTradeProductDescription">
+            <summary>Gets the line item specified trade product description.</summary>
+            <returns>the line item specified trade product description</returns>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Basic.CountryCode">
+            <summary>Class that can be used to check if a country code is well-formed.</summary>
+            <remarks>
+            Class that can be used to check if a country code is well-formed.
+            IMPORTANT: this doesn't check if the code is valid in the sense that
+            it doesn't check the code against a list of countries.
+            </remarks>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Basic.CountryCode.IsValid(System.String)">
+            <summary>
+            The code list provided with the ZUGFeRD standard only lists four codes:
+            DE, FR, IT, and CN.
+            </summary>
+            <remarks>
+            The code list provided with the ZUGFeRD standard only lists four codes:
+            DE, FR, IT, and CN. Obviously, there are more codes available (in ISO 3166-1 alpha-2).
+            We won't check the presence of a code in ISO ISO 3166-1 alpha-2, but we'll check if the
+            code consists of two letters and if it's uppercase.
+            </remarks>
+            <param name="code">the code to be tested</param>
+            <returns>true if the code has the correct format</returns>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Basic.CurrencyCode">
+            <summary>Class that can be used to check if a currency code is well-formed.</summary>
+            <remarks>
+            Class that can be used to check if a currency code is well-formed.
+            IMPORTANT: this doesn't check if the code is valid in the sense that
+            it doesn't check the code against a list of currencies.
+            </remarks>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Basic.CurrencyCode.IsValid(System.String)">
+            <summary>
+            The code list provided with the ZUGFeRD standard only lists four codes:
+            EUR, USD, GBP and COP.
+            </summary>
+            <remarks>
+            The code list provided with the ZUGFeRD standard only lists four codes:
+            EUR, USD, GBP and COP. Obviously, there are more codes available (in ISO 4217-3A).
+            We won't check the presence of a code in ISO 4217-3A, but we'll check if the
+            code consists of three letters and if it's uppercase.
+            </remarks>
+            <param name="code">the code to be tested</param>
+            <returns>true if the code has the correct format</returns>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Basic.DateFormatCode">
+            <summary>Class that can be used to check a code for a date format.</summary>
+            <remarks>
+            Class that can be used to check a code for a date format.
+            Additionally, this class also contains some methods that allow you
+            to convert dates to strings and vice-versa based on a given format.
+            </remarks>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.DateFormatCode.YYYYMMDD">
+            <summary>
+            The Constant YYYYMMDD.
+            </summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.DateFormatCode.YYYYMM">
+            <summary>
+            The Constant YYYYMM.
+            </summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.DateFormatCode.YYYYWW">
+            <summary>
+            The Constant YYYYWW.
+            </summary>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Basic.DateFormatCode.GetDateFormat(System.String)">
+            <summary>
+            Gets the date format
+            </summary>
+            <param name="format">the format</param>
+            <returns>the date format</returns>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Basic.DateFormatCode.ConvertToString(System.DateTime,System.String)">
+            <summary>
+            Converts a date to a string.
+            </summary>
+            <param name="d">the date</param>
+            <param name="format">format the format</param>
+            <returns>the resulting string</returns>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException"/>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Basic.DateFormatCode.ConvertToDate(System.String,System.String)">
+            <summary>
+            Converts a string to a date in a specific format.
+            </summary>
+            <param name="d">the date</param>
+            <param name="format">the format</param>
+            <returns>the resulting string</returns>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Basic.DocumentTypeCode">
+            <summary>
+            Class that can be used to check if a document type code is valid for
+            use in the context of a specific format.
+            </summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.DocumentTypeCode.COMMERCIAL_INVOICE">
+            <summary>The Constant COMMERCIAL_INVOICE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.DocumentTypeCode.DEBIT_NOTE_FINANCIAL_ADJUSTMENT">
+            <summary>The Constant DEBIT_NOTE_FINANCIAL_ADJUSTMENT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.DocumentTypeCode.SELF_BILLED_INVOICE">
+            <summary>The Constant SELF_BILLED_INVOICE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.DocumentTypeCode.BASIC">
+            <summary>The Constant BASIC.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.DocumentTypeCode.COMFORT">
+            <summary>The Constant COMFORT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.DocumentTypeCode.EXTENDED">
+            <summary>The Constant EXTENDED.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.DocumentTypeCode.profile">
+            <summary>The profile.</summary>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Basic.DocumentTypeCode.#ctor(System.Int32)">
+            <summary>
+            Creates a new
+            <see cref="T:iText.Zugferd.Validation.Basic.DocumentTypeCode"/>
+            .
+            </summary>
+            <param name="profile">the profile</param>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Basic.DocumentTypeCode.IsValidBasic(System.String)">
+            <summary>Checks if a code is valid for the Basic profile.</summary>
+            <param name="code">the code</param>
+            <returns>true, if a valid Basic profile code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Basic.DocumentTypeCode.IsValidComfort(System.String)">
+            <summary>Checks if a code is valid for the Comfort profile.</summary>
+            <param name="code">the code</param>
+            <returns>true, if a valid Comfort profile code</returns>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Basic.DocumentTypeCode.IsValidExtended(System.String)">
+            <summary>Checks if a code is valid for the Extended profile.</summary>
+            <param name="code">the code</param>
+            <returns>true, if a valid Extended profile code</returns>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Basic.LanguageCode">
+            <summary>Class that can be used to check if a language code is well-formed.</summary>
+            <remarks>
+            Class that can be used to check if a language code is well-formed.
+            IMPORTANT: this doesn't check if the code is valid in the sense that
+            it doesn't check the code against a list of languages.
+            </remarks>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Basic.LanguageCode.IsValid(System.String)">
+            <summary>
+            The code list provided with the ZUGFeRD standard only lists four codes:
+            de, fr, en, and es.
+            </summary>
+            <remarks>
+            The code list provided with the ZUGFeRD standard only lists four codes:
+            de, fr, en, and es. Obviously, there are more codes available (in ISO 639-1).
+            We won't check the presence of a code in ISO 639-1, but we'll check if the
+            code consists of two letters and if it's lowercase.
+            </remarks>
+            <param name="code">the code to be tested</param>
+            <returns>true if the code has the correct format</returns>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Basic.MeasurementUnitCode">
+            <summary>Class that can be used to check if a measurement unit code is valid.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.ITEM">
+            <summary>The Constant ITEM.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.DAY">
+            <summary>The Constant DAY.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.HA">
+            <summary>The Constant HA.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.HR">
+            <summary>The Constant HR.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.KG">
+            <summary>The Constant KG.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.KM">
+            <summary>The Constant KM.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.KWH">
+            <summary>The Constant KWH.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.SUM">
+            <summary>The Constant SUM.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.L">
+            <summary>The Constant L.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.MIN">
+            <summary>The Constant MIN.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.MM2">
+            <summary>The Constant MM2.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.MM">
+            <summary>The Constant MM.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.M2">
+            <summary>The Constant M2.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.M3">
+            <summary>The Constant M3.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.M">
+            <summary>The Constant M.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.NO">
+            <summary>The Constant NO.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.PR">
+            <summary>The Constant PR.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.PCT">
+            <summary>The Constant PCT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.SET">
+            <summary>The Constant SET.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.T">
+            <summary>The Constant T.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.MeasurementUnitCode.WK">
+            <summary>The Constant WK.</summary>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Basic.TaxIDTypeCode">
+            <summary>Class that can be used to check if a tax ID type code is valid.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.TaxIDTypeCode.VAT">
+            <summary>The Constant VAT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.TaxIDTypeCode.FISCAL_NUMBER">
+            <summary>The Constant FISCAL_NUMBER.</summary>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Basic.TaxTypeCode">
+            <summary>Class that can be used to check if a tax type code is valid.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.TaxTypeCode.VALUE_ADDED_TAX">
+            <summary>The Constant VALUE_ADDED_TAX.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.TaxTypeCode.INSURANCE_TAX">
+            <summary>The Constant INSURANCE_TAX.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Basic.TaxTypeCode.TAX_ON_REPLACEMENT_PART">
+            <summary>The Constant TAX_ON_REPLACEMENT_PART.</summary>
+        </member>
+        <member name="T:iText.Zugferd.Validation.CodeValidation">
+            <summary>Abstract superclass of a series of code validation classes.</summary>
+        </member>
+        <member name="M:iText.Zugferd.Validation.CodeValidation.IsValid(System.String)">
+            <summary>Checks if a specific code is valid.</summary>
+            <param name="code">the value you want to check</param>
+            <returns>true if the code is valid</returns>
+        </member>
+        <member name="M:iText.Zugferd.Validation.CodeValidation.Check(System.String)">
+            <summary>Checks if a specific code is valid.</summary>
+            <param name="code">the value you want to check</param>
+            <returns>the code that has been checked</returns>
+            <exception cref="T:iText.Zugferd.Exceptions.InvalidCodeException">the invalid code exception</exception>
+        </member>
+        <member name="M:iText.Zugferd.Validation.CodeValidation.IsNumeric(System.String,System.Int32)">
+            <summary>Checks the length of a code and if a code consists of numbers only.</summary>
+            <param name="code">the code that needs to be checked</param>
+            <param name="digits">the expected length of the code</param>
+            <returns>true if the code is numeric and has the expected length</returns>
+        </member>
+        <member name="M:iText.Zugferd.Validation.CodeValidation.IsUppercase(System.String,System.Int32)">
+            <summary>
+            Checks the length of a code and if a code consists of uppercase letters
+            from A to Z.
+            </summary>
+            <param name="code">the code that needs to be checked</param>
+            <param name="chars">the expected length of the code</param>
+            <returns>true if the code consists of letters from A to Z and has the expected length</returns>
+        </member>
+        <member name="M:iText.Zugferd.Validation.CodeValidation.IsLowercase(System.String,System.Int32)">
+            <summary>
+            Checks the length of a code and if a code consists of lowercase letters
+            from a to z.
+            </summary>
+            <param name="code">the code that needs to be checked</param>
+            <param name="chars">the expected length of the code</param>
+            <returns>true if the code consists of letters from a to z and has the expected length</returns>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode">
+            <summary>Class that can be used to check if a free text subject code is valid.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode.REGULATORY_INFORMATION">
+            <summary>The Constant REGULATORY_INFORMATION.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode.PRICE_CONDITIONS">
+            <summary>The Constant PRICE_CONDITIONS.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode.ADDITIONAL_SALES_CONDITIONS">
+            <summary>The Constant ADDITIONAL_SALES_CONDITIONS.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode.PAYMENT_INFORMATION">
+            <summary>The Constant PAYMENT_INFORMATION.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode.PRICE_CALCULATION_FORMULA">
+            <summary>The Constant PRICE_CALCULATION_FORMULA.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode.PRODUCT_INFORMATION">
+            <summary>The Constant PRODUCT_INFORMATION.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode.CERTIFICATION_STATEMENTS">
+            <summary>The Constant CERTIFICATION_STATEMENTS.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode.HEADER">
+            <summary>The Constant HEADER.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode.LINE">
+            <summary>The Constant LINE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode.level">
+            <summary>The level.</summary>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode.#ctor(System.Int32)">
+            <summary>
+            Creates a new
+            <see cref="T:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode"/>
+            instance.
+            </summary>
+            <param name="level">the level</param>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode.IsHeaderLevel(System.String)">
+            <summary>Checks if the code is a header level code.</summary>
+            <param name="code">the code</param>
+            <returns>true, if is header level</returns>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Comfort.FreeTextSubjectCode.IsLineLevel(System.String)">
+            <summary>Checks if the code is a line level code.</summary>
+            <param name="code">the code</param>
+            <returns>true, if is line level</returns>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Comfort.GlobalIdentifierCode">
+            <summary>Class that can be used to check if a global identifier code is well-formed.</summary>
+            <remarks>
+            Class that can be used to check if a global identifier code is well-formed.
+            IMPORTANT: this doesn't check if the code is valid in the sense that
+            it doesn't check the code against a list of global identifier codes.
+            </remarks>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.GlobalIdentifierCode.SWIFT">
+            <summary>The Constant SWIFT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.GlobalIdentifierCode.DUNS">
+            <summary>The Constant DUNS.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.GlobalIdentifierCode.GLN">
+            <summary>The Constant GLN.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.GlobalIdentifierCode.GTIN">
+            <summary>The Constant GTIN.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.GlobalIdentifierCode.ODETTE">
+            <summary>The Constant ODETTE.</summary>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Comfort.GlobalIdentifierCode.IsValid(System.String)">
+            <summary>The code list provided with the ZUGFeRD standard only lists five codes.</summary>
+            <remarks>
+            The code list provided with the ZUGFeRD standard only lists five codes.
+            There are more codes available (in ISO 6523).
+            We won't check the presence of a code in ISO 6523, but we'll check if
+            the code consists of four numbers.
+            </remarks>
+            <param name="code">the code to be tested</param>
+            <returns>true if the code has the correct format</returns>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Comfort.PaymentMeansCode">
+            <summary>Class that can be used to check if a payment means code is valid.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.PaymentMeansCode.NOT_DEFINED">
+            <summary>The Constant NOT_DEFINED.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.PaymentMeansCode.AUTOMATED_CLEARING_HOUSE">
+            <summary>The Constant AUTOMATED_CLEARING_HOUSE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.PaymentMeansCode.CASH">
+            <summary>The Constant CASH.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.PaymentMeansCode.CHEQUE">
+            <summary>The Constant CHEQUE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.PaymentMeansCode.DEBIT_TRANSFER">
+            <summary>The Constant DEBIT_TRANSFER.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.PaymentMeansCode.PAYMENT_TO_BANK_ACCOUNT">
+            <summary>The Constant PAYMENT_TO_BANK_ACCOUNT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.PaymentMeansCode.BANK_CARD">
+            <summary>The Constant BANK_CARD.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.PaymentMeansCode.DIRECT_DEBIT">
+            <summary>The Constant DIRECT_DEBIT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.PaymentMeansCode.CLEARING">
+            <summary>The Constant CLEARING.</summary>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Comfort.TaxCategoryCode">
+            <summary>Class that can be used to check if a tax category code is valid.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.TaxCategoryCode.VAT_REVERSE_CHARGE">
+            <summary>The Constant VAT_REVERSE_CHARGE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.TaxCategoryCode.EXEMPT_FROM_TAX">
+            <summary>The Constant EXEMPT_FROM_TAX.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.TaxCategoryCode.ZERO_RATED_GOODS">
+            <summary>The Constant ZERO_RATED_GOODS.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.TaxCategoryCode.OUTSIDE_SCOPE">
+            <summary>The Constant OUTSIDE_SCOPE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.TaxCategoryCode.INTRA_COMMUNITY_SUPPLY">
+            <summary>The Constant INTRA_COMMUNITY_SUPPLY.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Comfort.TaxCategoryCode.STANDARD_RATE">
+            <summary>The Constant STANDARD_RATE.</summary>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode">
+            <summary>Series of codes that can be used for additional referenced documents.</summary>
+            <remarks>
+            Series of codes that can be used for additional referenced documents.
+            These codes are used only in the context of the Extended profile.
+            </remarks>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.ORDER_ACKNOWLEDGEMENT">
+            <summary>The Constant ORDER_ACKNOWLEDGEMENT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.PROFORMA_INVOICE">
+            <summary>The Constant PROFORMA_INVOICE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.OFFER">
+            <summary>The Constant OFFER.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.DELIVERY_ORDER">
+            <summary>The Constant DELIVERY_ORDER.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.DRAWING">
+            <summary>The Constant DRAWING.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.WAYBILL">
+            <summary>The Constant WAYBILL.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.TRANSPORT_CONTRACT">
+            <summary>The Constant TRANSPORT_CONTRACT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.GOODS_DECLARATION">
+            <summary>The Constant GOODS_DECLARATION.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.PROJECT_SPECIFICATION">
+            <summary>The Constant PROJECT_SPECIFICATION.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.DISPUTE">
+            <summary>The Constant DISPUTE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.AGREEMENT">
+            <summary>The Constant AGREEMENT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.RETURNS_NOTICE">
+            <summary>The Constant RETURNS_NOTICE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.RECEIVING_ADVICE">
+            <summary>The Constant RECEIVING_ADVICE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.INVENTORY_REPORT">
+            <summary>The Constant INVENTORY_REPORT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.PROOF_OF_DELIVERY">
+            <summary>The Constant PROOF_OF_DELIVERY.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.COLLECTION_REF">
+            <summary>The Constant COLLECTION_REF.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.DOCUMENT_REF">
+            <summary>The Constant DOCUMENT_REF.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.BLANKET_ORDER">
+            <summary>The Constant BLANKET_ORDER.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.BUYERS_CONTRACT">
+            <summary>The Constant BUYERS_CONTRACT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.CREDIT_NOTE">
+            <summary>The Constant CREDIT_NOTE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.DEBIT_NOTE">
+            <summary>The Constant DEBIT_NOTE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.METER_UNIT">
+            <summary>The Constant METER_UNIT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.PREVIOUS_INVOICE">
+            <summary>The Constant PREVIOUS_INVOICE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.PRICE_LIST">
+            <summary>The Constant PRICE_LIST.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.PACKING_LIST">
+            <summary>The Constant PACKING_LIST.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.PURCHASE_ORDER_RESPONSE">
+            <summary>The Constant PURCHASE_ORDER_RESPONSE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.PURCHASE_ORDER_CHANGE">
+            <summary>The Constant PURCHASE_ORDER_CHANGE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.TRANSPORT_INSTRUCTION">
+            <summary>The Constant TRANSPORT_INSTRUCTION.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AdditionalReferencedDocumentsCode.VENDOR_ORDER">
+            <summary>The Constant VENDOR_ORDER.</summary>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Extended.AllowanceChargeReasonCode">
+            <summary>Series of codes that can be used for allowance charge reasons.</summary>
+            <remarks>
+            Series of codes that can be used for allowance charge reasons.
+            These codes are used only in the context of the Extended profile.
+            </remarks>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AllowanceChargeReasonCode.ADVERTISING">
+            <summary>The Constant ADVERTISING.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AllowanceChargeReasonCode.OTHER_SERVICES">
+            <summary>The Constant OTHER_SERVICES.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AllowanceChargeReasonCode.COLLECTION_AND_RECYCLING">
+            <summary>The Constant COLLECTION_AND_RECYCLING.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AllowanceChargeReasonCode.DISCOUNT">
+            <summary>The Constant DISCOUNT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AllowanceChargeReasonCode.EARLY_PAYMENT_ALLOWANCE">
+            <summary>The Constant EARLY_PAYMENT_ALLOWANCE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AllowanceChargeReasonCode.FREIGHT_SERVICE">
+            <summary>The Constant FREIGHT_SERVICE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AllowanceChargeReasonCode.INSURANCE">
+            <summary>The Constant INSURANCE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AllowanceChargeReasonCode.MINIMUM_BILLING_CHARGE">
+            <summary>The Constant MINIMUM_BILLING_CHARGE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AllowanceChargeReasonCode.NON_RETURNABLE_CONTAINERS">
+            <summary>The Constant NON_RETURNABLE_CONTAINERS.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AllowanceChargeReasonCode.PACKING">
+            <summary>The Constant PACKING.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AllowanceChargeReasonCode.REBATE">
+            <summary>The Constant REBATE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.AllowanceChargeReasonCode.SPECIAL_HANDLING">
+            <summary>The Constant SPECIAL_HANDLING.</summary>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Extended.IncotermsCode">
+            <summary>Series of codes that can be used for incoterms.</summary>
+            <remarks>
+            Series of codes that can be used for incoterms.
+            These codes are used only in the context of the Extended profile.
+            </remarks>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.IncotermsCode.EX_WORKS">
+            <summary>The Constant EX_WORKS.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.IncotermsCode.FREE_CARRIER">
+            <summary>The Constant FREE_CARRIER.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.IncotermsCode.FREE_ALONGSIDE_SHIP">
+            <summary>The Constant FREE_ALONGSIDE_SHIP.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.IncotermsCode.FREE_ON_BOARD">
+            <summary>The Constant FREE_ON_BOARD.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.IncotermsCode.COST_AND_FREIGHT">
+            <summary>The Constant COST_AND_FREIGHT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.IncotermsCode.COST_INSURANCE_FREIGHT">
+            <summary>The Constant COST_INSURANCE_FREIGHT.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.IncotermsCode.DELIVERED_AT_TERMINAL">
+            <summary>The Constant DELIVERED_AT_TERMINAL.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.IncotermsCode.DELIVERED_AT_PLACE">
+            <summary>The Constant DELIVERED_AT_PLACE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.IncotermsCode.CARRIAGE_PAID_TO">
+            <summary>The Constant CARRIAGE_PAID_TO.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.IncotermsCode.CARRIAGE_INSURANCE_PAID">
+            <summary>The Constant CARRIAGE_INSURANCE_PAID.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.IncotermsCode.DELIVERED_DUTY_PAID">
+            <summary>The Constant DELIVERED_DUTY_PAID.</summary>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Extended.ProductClassificationSystemCode">
+            <summary>Series of codes that can be used for the product classification system.</summary>
+            <remarks>
+            Series of codes that can be used for the product classification system.
+            These codes are used only in the context of the Extended profile.
+            </remarks>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.ProductClassificationSystemCode.GPC">
+            <summary>The Constant GPC.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.ProductClassificationSystemCode.ECL">
+            <summary>The Constant ECL.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.ProductClassificationSystemCode.UNSPSC">
+            <summary>The Constant UNSPSC.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.ProductClassificationSystemCode.HS">
+            <summary>The Constant HS.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.ProductClassificationSystemCode.CBV">
+            <summary>The Constant CBV.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.ProductClassificationSystemCode.SELLER_ASSIGNED">
+            <summary>The Constant SELLER_ASSIGNED.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.ProductClassificationSystemCode.BUYER_ASSIGNED">
+            <summary>The Constant BUYER_ASSIGNED.</summary>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Extended.QuantityCode">
+            <summary>Series of codes that can be used for quantities.</summary>
+            <remarks>
+            Series of codes that can be used for quantities.
+            These codes are used only in the context of the Extended profile.
+            </remarks>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.QuantityCode.BARREL">
+            <summary>The Constant BARREL.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.QuantityCode.BOTTLECRATE">
+            <summary>The Constant BOTTLECRATE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.QuantityCode.BAG">
+            <summary>The Constant BAG.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.QuantityCode.BOTTLE">
+            <summary>The Constant BOTTLE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.QuantityCode.BOX">
+            <summary>The Constant BOX.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.QuantityCode.CASE">
+            <summary>The Constant CASE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.QuantityCode.CARTON">
+            <summary>The Constant CARTON.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.QuantityCode.CAN">
+            <summary>The Constant CAN.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.QuantityCode.UNPACKAGED">
+            <summary>The Constant UNPACKAGED.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.QuantityCode.PALLET">
+            <summary>The Constant PALLET.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.QuantityCode.ROLL">
+            <summary>The Constant ROLL.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.QuantityCode.SACK">
+            <summary>The Constant SACK.</summary>
+        </member>
+        <member name="M:iText.Zugferd.Validation.Extended.QuantityCode.IsValid(System.String)">
+            <summary>The code list provided with the ZUGFeRD standard only lists twelve codes.</summary>
+            <remarks>
+            The code list provided with the ZUGFeRD standard only lists twelve codes.
+            There are more codes available (in UNCL 7065).
+            We won't check the presence of a code in UNCL 7065, but we'll check if
+            the code consists of two letters and if it's uppercase.
+            </remarks>
+            <param name="code">the code to be tested</param>
+            <returns>true if the code has the correct format</returns>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Extended.TransportIdentificationCode">
+            <summary>Series of codes that can be used for transport identification.</summary>
+            <remarks>
+            Series of codes that can be used for transport identification.
+            These codes are used only in the context of the Extended profile.
+            </remarks>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportIdentificationCode.SHIPMENT_REFERENCE">
+            <summary>The Constant SHIPMENT_REFERENCE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportIdentificationCode.FLIGHT_NUMBER">
+            <summary>The Constant FLIGHT_NUMBER.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportIdentificationCode.NUMBER_PLATE">
+            <summary>The Constant NUMBER_PLATE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportIdentificationCode.SSCC">
+            <summary>The Constant SSCC.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportIdentificationCode.GINC">
+            <summary>The Constant GINC.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportIdentificationCode.GSIN">
+            <summary>The Constant GSIN.</summary>
+        </member>
+        <member name="T:iText.Zugferd.Validation.Extended.TransportMeansCode">
+            <summary>Series of codes that can be used for transport identification.</summary>
+            <remarks>
+            Series of codes that can be used for transport identification.
+            These codes are used only in the context of the Extended profile.
+            </remarks>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportMeansCode.MARITIME">
+            <summary>The Constant MARITIME.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportMeansCode.RAIL">
+            <summary>The Constant RAIL.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportMeansCode.ROAD">
+            <summary>The Constant ROAD.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportMeansCode.AIR">
+            <summary>The Constant AIR.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportMeansCode.MAIL">
+            <summary>The Constant MAIL.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportMeansCode.MULTIMODAL">
+            <summary>The Constant MULTIMODAL.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportMeansCode.FIXED_INSTALLATION">
+            <summary>The Constant FIXED_INSTALLATION.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportMeansCode.INLAND_WATER">
+            <summary>The Constant INLAND_WATER.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.Extended.TransportMeansCode.NOT_APPLICABLE">
+            <summary>The Constant NOT_APPLICABLE.</summary>
+        </member>
+        <member name="T:iText.Zugferd.Validation.NumberChecker">
+            <summary>
+            Provide a means to check if a String consist of characters from 0 to 9
+            and a decimal point in case a decimal is expected.
+            </summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.NumberChecker.INTEGER">
+            <summary>The Constant INTEGER.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.NumberChecker.ANY_DECIMALS">
+            <summary>The Constant ANY_DECIMALS.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.NumberChecker.TWO_DECIMALS">
+            <summary>The Constant TWO_DECIMALS.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.NumberChecker.FOUR_DECIMALS">
+            <summary>The Constant FOUR_DECIMALS.</summary>
+        </member>
+        <member name="F:iText.Zugferd.Validation.NumberChecker.type">
+            <summary>The type of checker: INTEGER, ANY_DECIMALS, TWO_DECIMALS, FOUR_DECIMALS.</summary>
+        </member>
+        <member name="M:iText.Zugferd.Validation.NumberChecker.#ctor(System.Int32)">
+            <summary>Creates a specific number checker.</summary>
+            <param name="type">
+            the type of checker that needs to be created:
+            INTEGER, ANY_DECIMALS, TWO_DECIMALS, or FOUR_DECIMALS
+            </param>
+        </member>
+        <member name="T:iText.Zugferd.ZugferdChecker">
+            <summary>
+            The
+            <see cref="T:iText.Pdfa.Checker.PdfA3Checker"/>
+            implementation for ZUGFeRD documents.
+            </summary>
+        </member>
+        <member name="F:iText.Zugferd.ZugferdChecker.attachments">
+            <summary>The attachments.</summary>
+        </member>
+        <member name="M:iText.Zugferd.ZugferdChecker.#ctor(iText.Kernel.Pdf.PdfAConformanceLevel)">
+            <summary>
+            Creates a new
+            <see cref="T:iText.Zugferd.ZugferdChecker"/>
+            instance.
+            </summary>
+            <param name="conformanceLevel">the conformance level</param>
+        </member>
+        <member name="T:iText.Zugferd.ZugferdConformanceException">
+            <summary>The ZUGFeRD conformance exception class.</summary>
+        </member>
+        <member name="F:iText.Zugferd.ZugferdConformanceException.AFRelationshipValueShallbeAlternative">
+            <summary>The Constant AFRelationshipValueShallbeAlternative.</summary>
+        </member>
+        <member name="M:iText.Zugferd.ZugferdConformanceException.#ctor(System.String)">
+            <summary>Creates ZUGFeRD conformance exception.</summary>
+            <param name="message">an exception message.</param>
+        </member>
+        <member name="M:iText.Zugferd.ZugferdConformanceException.#ctor(System.String,System.Object)">
+            <summary>Creates ZUGFeRD conformance exception.</summary>
+            <param name="message">the error message</param>
+            <param name="object">an object</param>
+        </member>
+        <member name="T:iText.Zugferd.ZugferdConformanceLevel">
+            <summary>Enumeration of the three possible conformance levels for ZUGFeRD.</summary>
+        </member>
+        <member name="T:iText.Zugferd.ZugferdDocument">
+            <summary>ZUGFeRD documents need to be PDF/A-3 compliant.</summary>
+            <remarks>
+            ZUGFeRD documents need to be PDF/A-3 compliant. This class inherits from the iText 7
+            <see cref="T:iText.Pdfa.PdfADocument"/>
+            implementation
+            for convenience. The PdfADocument class will handle all of the PDF/A-3 compliance, while this class will handle the
+            ZUGFeRD compliance.
+            </remarks>
+        </member>
+        <member name="F:iText.Zugferd.ZugferdDocument.zugferdConformanceLevel">
+            <summary>The ZUGFeRD conformance level.</summary>
+        </member>
+        <member name="M:iText.Zugferd.ZugferdDocument.#ctor(iText.Kernel.Pdf.PdfWriter,iText.Zugferd.ZugferdProperties)">
+            <summary>Creates a ZUGFeRD document with the passed ZUGFeRD conformance level, PDF/A conformance level and output intent using the passed writer.
+                </summary>
+            <param name="writer">Writer to output the PDF</param>
+            <param name="properties">ZUGFeRD properties.</param>
+        </member>
+        <member name="M:iText.Zugferd.ZugferdDocument.#ctor(iText.Kernel.Pdf.PdfWriter,iText.Zugferd.ZugferdConformanceLevel,iText.Kernel.Pdf.PdfAConformanceLevel,iText.Kernel.Pdf.PdfOutputIntent)">
+            <summary>Creates a ZUGFeRD document with the passed ZUGFeRD conformance level, PDF/A conformance level and output intent using the passed writer.
+                </summary>
+            <param name="writer">Writer to output the PDF</param>
+            <param name="zugferdConformanceLevel">ZUGFeRD conformance level, one of  the following: BASIC, COMFORT or EXTENDED
+                </param>
+            <param name="pdfaConformanceLevel">PDF/A conformance level</param>
+            <param name="outputIntent">PDF/A output intent for the document.</param>
+        </member>
+        <member name="M:iText.Zugferd.ZugferdDocument.#ctor(iText.Kernel.Pdf.PdfWriter,iText.Zugferd.ZugferdConformanceLevel,iText.Kernel.Pdf.PdfOutputIntent)">
+            <summary>Creates a ZUGFeRD document with the passed ZUGFeRD conformance level and output intent using the passed writer.
+                </summary>
+            <remarks>Creates a ZUGFeRD document with the passed ZUGFeRD conformance level and output intent using the passed writer. The PdfAConformanceLevel will be set to PDF/A-3B.
+                </remarks>
+            <param name="writer">Writer to output the pdf</param>
+            <param name="zugferdConformanceLevel">ZUGFeRD conformance level, BASIC, COMFORT or EXTENDED</param>
+            <param name="outputIntent">Pdf/A output intent for the document</param>
+        </member>
+        <member name="M:iText.Zugferd.ZugferdDocument.#ctor(iText.Kernel.Pdf.PdfWriter,iText.Kernel.Pdf.PdfAConformanceLevel,iText.Kernel.Pdf.PdfOutputIntent)">
+            <summary>Creates a ZUGFeRD document with the passed Pdf/A conformance level and output intent using the passed writer.
+                </summary>
+            <remarks>Creates a ZUGFeRD document with the passed Pdf/A conformance level and output intent using the passed writer. The ZUGFeRD Conformance level will be set to BASIC.
+                </remarks>
+            <param name="writer">Writer to output the pdf</param>
+            <param name="pdfaConformanceLevel">Pdf/A conformance level</param>
+            <param name="outputIntent">Pdf/A output intent for the document</param>
+        </member>
+        <member name="M:iText.Zugferd.ZugferdDocument.#ctor(iText.Kernel.Pdf.PdfWriter,iText.Kernel.Pdf.PdfOutputIntent)">
+            <summary>Create a ZUGFeRD document with the given output intent using given the writer.</summary>
+            <remarks>Create a ZUGFeRD document with the given output intent using given the writer. The ZUGFeRD Conformance level will be set to BASIC and the Pdf/A conformance level will be set to PDF/A-3B.
+                </remarks>
+            <param name="writer">Writer to output the pdf</param>
+            <param name="outputIntent">Pdf/A output intent for the document</param>
+        </member>
+        <member name="M:iText.Zugferd.ZugferdDocument.AddZugferdRdfDescription(iText.Kernel.XMP.XMPMeta,iText.Zugferd.ZugferdConformanceLevel)">
+            <summary>Adds the ZUGFeRD RDF description.</summary>
+            <param name="xmpMeta">the xmp meta</param>
+            <param name="zugferdConformanceLevel">the zugferd conformance level</param>
+            <exception cref="T:iText.Kernel.XMP.XMPException">the XMP exception</exception>
+        </member>
+        <member name="M:iText.Zugferd.ZugferdDocument.GetZugferdExtension(iText.Zugferd.ZugferdConformanceLevel)">
+            <summary>Gets the ZUGFeRD extension.</summary>
+            <param name="conformanceLevel">the conformance level</param>
+            <returns>the ZUGFeRD extension</returns>
+        </member>
+        <member name="T:iText.Zugferd.ZugferdLogMessageConstant">
+            <summary>Class that bundles the log messages for the ZUGFeRD add-on.</summary>
+        </member>
+        <member name="F:iText.Zugferd.ZugferdLogMessageConstant.NO_ZUGFERD_PROFILE_TYPE_SPECIFIED">
+            <summary>Log message.</summary>
+        </member>
+        <member name="F:iText.Zugferd.ZugferdLogMessageConstant.WRONG_OR_NO_CONFORMANCE_LEVEL">
+            <summary>Log message.</summary>
+        </member>
+        <member name="T:iText.Zugferd.ZugferdProductInfo">
+            <summary>Product info about this iText add-on.</summary>
+        </member>
+        <member name="F:iText.Zugferd.ZugferdProductInfo.PRODUCT_NAME">
+            <summary>The product name.</summary>
+        </member>
+        <member name="F:iText.Zugferd.ZugferdProductInfo.MAJOR_VERSION">
+            <summary>The major version number.</summary>
+        </member>
+        <member name="F:iText.Zugferd.ZugferdProductInfo.MINOR_VERSION">
+            <summary>The minor version number.</summary>
+        </member>
+        <member name="M:iText.Zugferd.ZugferdProperties.SetEventCountingMetaInfo(iText.Kernel.Counter.Event.IMetaInfo)">
+            <summary>Sets document meta info.</summary>
+            <remarks>
+            Sets document meta info. This meta info will be passed to the
+            <see cref="T:iText.Kernel.Counter.EventCounter"/>
+            with
+            <see cref="T:iText.Zugferd.Events.PdfInvoiceEvent"/>
+            and can be used to determine event origin.
+            </remarks>
+            <param name="metaInfo">meta info to set</param>
+            <returns>
+            this
+            <see cref="T:iText.Zugferd.ZugferdProperties"/>
+            instance
+            </returns>
+        </member>
+        <member name="M:iText.Zugferd.ZugferdProperties.SetZugferdConformanceLevel(System.Nullable{iText.Zugferd.ZugferdConformanceLevel})">
+            <summary>Sets ZUGFeRD conformance level, one of  the following: BASIC, COMFORT or EXTENDED.</summary>
+            <param name="zugferdConformanceLevel">conformance level to set</param>
+            <returns>
+            this
+            <see cref="T:iText.Zugferd.ZugferdProperties"/>
+            instance
+            </returns>
+        </member>
+        <member name="M:iText.Zugferd.ZugferdProperties.SetPdfAConformanceLevel(iText.Kernel.Pdf.PdfAConformanceLevel)">
+            <summary>Sets PDF/A conformance level.</summary>
+            <param name="pdfaConformanceLevel">conformance level to set</param>
+            <returns>
+            this
+            <see cref="T:iText.Zugferd.ZugferdProperties"/>
+            instance
+            </returns>
+        </member>
+        <member name="M:iText.Zugferd.ZugferdProperties.SetPdfOutputIntent(iText.Kernel.Pdf.PdfOutputIntent)">
+            <summary>Sets PDF/A output intent for the document.</summary>
+            <param name="pdfOutputIntent">output intent to set</param>
+            <returns>
+            this
+            <see cref="T:iText.Zugferd.ZugferdProperties"/>
+            instance
+            </returns>
+        </member>
+        <member name="T:iText.Zugferd.ZugferdXMPUtil">
+            <summary>Class containing constants used in the XMP of a ZUGFeRD document.</summary>
+        </member>
+        <member name="F:iText.Zugferd.ZugferdXMPUtil.ZUGFERD_EXTENSION">
+            <summary>The Constant ZUGFERD_EXTENSION.</summary>
+        </member>
+        <member name="F:iText.Zugferd.ZugferdXMPUtil.ZUGFERD_SCHEMA_NS">
+            <summary>The Constant ZUGFERD_SCHEMA_NS.</summary>
+        </member>
+        <member name="F:iText.Zugferd.ZugferdXMPUtil.ZUGFERD_CONFORMANCE_LEVEL">
+            <summary>The Constant ZUGFERD_CONFORMANCE_LEVEL.</summary>
+        </member>
+        <member name="F:iText.Zugferd.ZugferdXMPUtil.ZUGFERD_DOCUMENT_FILE_NAME">
+            <summary>The Constant ZUGFERD_DOCUMENT_FILE_NAME.</summary>
+        </member>
+        <member name="F:iText.Zugferd.ZugferdXMPUtil.ZUGFERD_DOCUMENT_TYPE">
+            <summary>The Constant ZUGFERD_DOCUMENT_TYPE.</summary>
+        </member>
+        <member name="F:iText.Zugferd.ZugferdXMPUtil.ZUGFERD_VERSION">
+            <summary>The Constant ZUGFERD_VERSION.</summary>
+        </member>
+    </members>
+</doc>

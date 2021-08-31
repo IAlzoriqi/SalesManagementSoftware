@@ -1,0 +1,15 @@
+create proc GetSingleProdact
+@id int
+as
+
+
+SELECT [PRODUCT_ID]
+      ,product.PRODUCT_ID
+      ,product.[DESCRIPTION]
+      ,product.[QTY_STOCK]
+      ,product.[PRICE]
+      ,category.[NAME]
+  FROM [dbo].[product]
+  inner join category on category.CATEGORY_ID = product.CATEGORY_ID
+   where [PRODUCT_ID]=@id
+

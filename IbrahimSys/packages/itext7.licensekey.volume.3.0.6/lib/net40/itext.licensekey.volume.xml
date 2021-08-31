@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>itext.licensekey.volume</name>
+    </assembly>
+    <members>
+        <member name="T:iText.License.Kinesis.Kinesis`1">
+            <summary>Class that interacts with AWS Kinesis.</summary>
+        </member>
+        <member name="T:iText.License.Kinesis.KinesisAsyncPut`1">
+            <summary>Class that follows the invocation of kinesis asynch put procedure</summary>
+        </member>
+        <member name="T:iText.License.VolumeCounterLoader">
+            <summary>Entry point for volume counter registration.</summary>
+        </member>
+        <member name="M:iText.License.VolumeCounterLoader.Update">
+            <summary>Register new volume counter.</summary>
+            <remarks>Register new volume counter. Updates it info if it was already registered.</remarks>
+        </member>
+        <member name="T:iText.License.Volume.VolumeEventCacheComparatorBased">
+            <summary>Comparator-based implementation of IEventCache.</summary>
+            <remarks>
+            Comparator-based implementation of IEventCache. Retrieve the smallest element based on comparator.
+            Not thread safe
+            </remarks>
+        </member>
+        <member name="T:iText.License.Volume.VolumeEventCacheQueueBased">
+            <summary>Queue-based implementation of IEventCache.</summary>
+            <remarks>
+            Queue-based implementation of IEventCache. Will retrieve first elements with oldest signatures.
+            Not thread-safe
+            </remarks>
+        </member>
+    </members>
+</doc>

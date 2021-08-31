@@ -1,0 +1,275 @@
+﻿<Window x:Class="Pizzaria1.MainWindow"   Loaded="Window_Loaded"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Pizzaria1"
+        xmlns:properties="clr-namespace:Pizzaria1.Properties"
+   
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d" Height="800" Width="1300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" >
+    <Window.Resources>
+        <Style TargetType="{x:Type UserControl}">
+            <Setter Property="Background" Value="Red" />
+        </Style>
+    </Window.Resources>
+    <Grid x:Name="maingride" x:FieldModifier="public" Background="#FFEEEEEE" MouseDown="Grid_MouseDown">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="71*"/>
+            <RowDefinition Height="729*"/>
+        </Grid.RowDefinitions>
+        <StackPanel  VerticalAlignment="Top">
+            <Grid   Background="{Binding Source={x:Static properties:Settings.Default}, Path=Backgroundbanal,  Mode=TwoWay}" Height="10"/>
+            <Grid Margin="5"  Background="{Binding Source={x:Static properties:Settings.Default}, Path=Backgroundbanal, Mode=TwoWay}">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock Text=" تصميم وبرمجةابراهيم الزريقي"  Foreground="{Binding Source={x:Static properties:Settings.Default}, Path=defultLine, Mode=TwoWay}" VerticalAlignment="Center" FontSize="20" FontFamily="Champagne &amp; Limousines" Margin="20 0"/>
+                    <Button Width="30" Height="30" Name="btnFaceBook" Click="btnFaceBook_Click" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="#FF2196F3">
+                        <materialDesign:PackIcon Kind="FacebookBox"/>
+                    </Button>
+                    <Button Width="30" Name="btntweeter" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="#FF2196F3" Click="btntweeter_Click">
+                        <materialDesign:PackIcon Kind="TwitterBox"/>
+                    </Button>
+                    <Button Width="30" Height="30" Name="btngithub" Click="btngithub_Click"  Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="#FF2196F3">
+                        <materialDesign:PackIcon Kind="GithubBox"/>
+                    </Button>
+                    <Button Width="30" Name="btnlinkedin" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="#FF2196F3" VerticalAlignment="Top" Click="btnlinkedin_Click">
+                        <materialDesign:PackIcon Kind="Linkedin"/>
+                    </Button>
+                    <Button Width="30" Name="btninstgram" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="#FF2196F3" Click="btninstgram_Click">
+                        <materialDesign:PackIcon Kind="Instagram"/>
+                    </Button>
+                    <Button Width="30" Name="btnwebsite" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="#FF2196F3" Click="btnwebsite_Click">
+                        <materialDesign:PackIcon Kind="Web"/>
+                    </Button>
+                    <Button Width="30" Height="30" Name="btntelegram" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="#FF2196F3" Click="btntelegram_Click">
+                        <materialDesign:PackIcon Kind="Telegram"/>
+                    </Button>
+                    <Button Width="30" Height="Auto" Name="btnemaile"  Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="#FF2196F3" Margin="0,0,0,0.4" Click="btnemaile_Click">
+                        <materialDesign:PackIcon Kind="Email"/>
+                    </Button>
+                    <Button Width="30" Height="30" Name="btnphoneno" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="#FF2196F3" VerticalAlignment="Top" Click="btnphoneno_Click">
+                        <materialDesign:PackIcon Kind="Phone"/>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10 0">
+                    <Button x:Name="ButtonFechar" Width="30" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="#FF2196F3" Click="ButtonFechar_Click">
+                        <materialDesign:PackIcon Kind="Power"/>
+                    </Button>
+                    <Button Width="30" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" Foreground="#FF2196F3">
+                        <materialDesign:PackIcon Kind="BellOutline"/>
+                    </Button>
+                    <Button Width="30" Height="30" x:Name="btnSeteng" Background="{x:Null}" Click="btnSeteng_Click" BorderBrush="{x:Null}" Padding="0" Foreground="#FF2196F3" Margin="0 0 10 0" VerticalAlignment="Top">
+                        <materialDesign:PackIcon Kind="Settings"/>
+                    </Button>
+
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+
+        <Grid Margin="10,45,240,10"
+              Background="{Binding Path=Backgroundbanal, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" 
+              x:Name="GridPrincipal2" 
+              x:FieldModifier="public"
+              Grid.RowSpan="2"  >
+            <Grid x:Name="GridPrincipal"
+                  x:FieldModifier="public"  
+                  HorizontalAlignment="Center" 
+                  VerticalAlignment="Center"/>
+            <Label x:Name="lblerror" 
+                   HorizontalAlignment="Right" 
+                   Margin="19,-6,0,0" 
+                   VerticalAlignment="Top"/>
+        </Grid>
+
+        <Grid x:Name="grideRight"  
+              x:FieldModifier="public"
+              Width="250" HorizontalAlignment="Right" 
+              Background="#FF222222" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+
+                <RowDefinition Height="47*"/>
+                <RowDefinition Height="753*"/>
+            </Grid.RowDefinitions>
+            <materialDesign:TransitioningContent 
+                x:Name="TrainsitionigContentSlide" 
+                OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft, Duration=0:0:0.2}" 
+                Margin="-10,0,10,0" 
+                Grid.RowSpan="2">
+
+                <Grid x:Name="GridCursor" 
+                      x:FieldModifier="public"  
+                      Margin="0,49,0,0" 
+                      Background="#FF0069C0" 
+                      Width="15" 
+                      HorizontalAlignment="Right"
+                      Height="60"
+                      VerticalAlignment="Top"/>
+            </materialDesign:TransitioningContent>
+            <ListView x:Name="ListViewMenuRight" 
+                      Margin="0,47,0,0" 
+                      x:FieldModifier="public"
+                      Foreground="LightGray"
+                      FontFamily="Champagne &amp; Limousines"
+                      FontSize="18"
+                      SelectionChanged="ListViewMenu_SelectionChanged"
+                      SelectedIndex="0"
+                      MouseWheel="ListViewMenuRight_MouseWheel"
+                      Grid.RowSpan="2">
+
+
+
+                <ListViewItem Height="60" x:Name="ListViewITemMOvSecrien" x:FieldModifier="public">
+
+                    <StackPanel Orientation="Horizontal">
+
+                        <TextBlock 
+                            Text="تسجيل الدخول"
+                            FontSize="17"
+                            VerticalAlignment="Center"
+                            Margin="70,0,0,0" Width="101"/>
+                        <materialDesign:PackIcon 
+                            Kind="Login" 
+                            Width="30" 
+                            Height="30" 
+                            VerticalAlignment="Center"
+                            Margin="5"/>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem Height="60">
+                    <StackPanel  Width="213" Orientation="Horizontal">
+
+                        <TextBlock 
+                            Text="اضافة مستخدم" 
+                            FontSize="17"
+                            VerticalAlignment="Center" 
+                            Margin="60,0,0,0" Width="110"/>
+                        <materialDesign:PackIcon 
+                            Kind="Account"
+                            Width="30"
+                            Height="30"
+                            VerticalAlignment="Center" 
+                            Margin="5"/>
+                    </StackPanel>
+                </ListViewItem>
+
+                <ListViewItem Height="60">
+
+                    <StackPanel  Width="213" Orientation="Horizontal">
+                        <TextBlock 
+                            Text="اضافة نوع مستخدم"
+                            FontSize="17" 
+                            VerticalAlignment="Center"
+                            Margin="40,0,0,0" Width="132"/>
+                        <materialDesign:PackIcon Kind="ContentSave" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
+                    </StackPanel>
+                </ListViewItem>
+
+
+                <ListViewItem Height="60">
+                    <StackPanel  Width="213" Orientation="Horizontal">
+                        <TextBlock 
+                            FontSize="17"
+                            VerticalAlignment="Center" 
+                           Margin="70,0,0,0" Width="101">
+                            <Run FlowDirection="LeftToRight" 
+                                 Text="ادارة المنتجات"/>
+                        </TextBlock>
+                        <materialDesign:PackIcon Kind="TruckDelivery" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
+
+                    </StackPanel>
+
+                </ListViewItem>
+                <ListViewItem Height="60" 
+                             >
+                    <StackPanel  Width="213" Orientation="Horizontal">
+
+                        <TextBlock FontSize="17" 
+                                    HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   Margin="80,0,0,0" Width="94">
+                            <Run FlowDirection="LeftToRight" Text="اضافةلمنتجات"/></TextBlock>
+                        <materialDesign:PackIcon
+                            Kind="TruckDelivery" 
+                            Width="30"
+                            Height="30" 
+                            VerticalAlignment="Center" 
+                            Margin="5"/>
+                    </StackPanel>
+
+                </ListViewItem>
+                <ListViewItem Height="60">
+                    <StackPanel   Width="213" Orientation="Horizontal">
+                        <TextBlock FontSize="17" VerticalAlignment="Center" Margin="80,0,0,0" Height="22" Width="94"><Run FlowDirection="RightToLeft" Text="ادارة الاصناف"/><LineBreak/><Run FlowDirection="RightToLeft"/></TextBlock>
+                        <materialDesign:PackIcon Kind="Cash" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
+
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem Height="60">
+                    <StackPanel  Width="213" Orientation="Horizontal">
+                        <TextBlock Text="ادارة العملاء" FontSize="17" VerticalAlignment="Center" Margin="80,0,0,0" Width="93"/>
+                        <materialDesign:PackIcon Kind="AccountStar" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem Height="60">
+                    <StackPanel
+                         Width="213"
+                        Orientation="Horizontal" >
+                        <TextBlock FontSize="17" 
+                                   VerticalAlignment="Center" 
+                                 Margin="100,0,0,0" Width="68"><Run FlowDirection="LeftToRight" Text="المبيعات"/></TextBlock>
+                        <materialDesign:PackIcon 
+                            Kind="FormatListBulleted"
+                            Width="30" 
+                            Height="30"
+                            VerticalAlignment="Center"
+                            Margin="5"/>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem Height="60" Selected="ListViewItem_Selected">
+                    <StackPanel Width="213" Orientation="Horizontal">
+                        <TextBlock FontSize="17" 
+                                   VerticalAlignment="Center" Margin="70,0,0,0" Width="101"><Run FlowDirection="LeftToRight" Text="ادارة المبيعات"/></TextBlock>
+                        <materialDesign:PackIcon Kind="FormatListBulleted" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
+
+                    </StackPanel>
+                </ListViewItem>
+
+                <ListViewItem Height="60">
+
+                    <StackPanel Width="213" Orientation="Horizontal">
+                        <TextBlock Text="ادارة المستخدمين" FontSize="17" VerticalAlignment="Center" Margin="50,0,0, 0" Width="123"/>
+                        <materialDesign:PackIcon Kind="Login" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
+                    </StackPanel>
+
+
+
+                </ListViewItem>
+
+                <ListViewItem Height="60">
+
+                    <StackPanel Orientation="Horizontal" Width="213">
+                        <TextBlock Text="ادارة الموظفين" FontSize="17" VerticalAlignment="Center" Margin="70,0,0, 0"/>
+                        <materialDesign:PackIcon Kind="Login" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
+
+                    </StackPanel>
+
+
+
+                </ListViewItem>
+                <ListViewItem Height="60">
+
+                    <StackPanel Orientation="Horizontal" Width="213">
+                        <TextBlock Text="قاعدة البيانات" FontSize="17" VerticalAlignment="Center" Margin="70,0,0, 0"/>
+                        <materialDesign:PackIcon Kind="Database" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
+
+                    </StackPanel>
+
+
+
+                </ListViewItem>
+            </ListView>
+        </Grid>
+
+    </Grid>
+</Window>

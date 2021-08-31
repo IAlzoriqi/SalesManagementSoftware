@@ -1,0 +1,1026 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>itext.typography</name>
+    </assembly>
+    <members>
+        <member name="T:iText.Typography.Bidi.BidiAlgorithm">
+            <summary>Reference implementation of the Unicode Bidirectional Algorithm (UAX #9).</summary>
+            <remarks>
+            Reference implementation of the Unicode Bidirectional Algorithm (UAX #9).
+            <para />
+            This implementation is not optimized for performance. It is intended as a
+            reference implementation that closely follows the specification of the
+            Bidirectional Algorithm in The Unicode Standard version 6.3.
+            <para />
+            <b>Input:</b><br />
+            There are two levels of input to the algorithm, since clients may prefer to
+            supply some information from out-of-band sources rather than relying on the
+            default behavior.
+            <list type="number">
+            <item><description>Bidi class array
+            </description></item>
+            <item><description>Bidi class array, with externally supplied base line direction
+            </description></item>
+            </list>
+            <para />
+            <b>Output:</b><br />
+            Output is separated into several stages as well, to better enable clients to
+            evaluate various aspects of implementation conformance.
+            <list type="number">
+            <item><description>levels array over entire paragraph
+            </description></item>
+            <item><description>reordering array over entire paragraph
+            </description></item>
+            <item><description>levels array over line
+            </description></item>
+            <item><description>reordering array over line
+            </description></item>
+            </list>
+            Note that for conformance to the Unicode Bidirectional Algorithm,
+            implementations are only required to generate correct reordering and
+            character directionality (odd or even levels) over a line. Generating
+            identical level arrays over a line is not required. Bidi explicit format
+            codes (LRE, RLE, LRO, RLO, PDF) and BN can be assigned arbitrary levels and
+            positions as long as the rest of the input is properly reordered.
+            <para />
+            As the algorithm is defined to operate on a single paragraph at a time, this
+            implementation is written to handle single paragraphs. Thus rule P1 is
+            presumed by this implementation-- the data provided to the implementation is
+            assumed to be a single paragraph, and either contains no 'B' codes, or a
+            single 'B' code at the end of the input. 'B' is allowed as input to
+            illustrate how the algorithm assigns it a level.
+            <para />
+            Also note that rules L3 and L4 depend on the rendering engine that uses the
+            result of the bidi algorithm. This implementation assumes that the rendering
+            engine expects combining marks in visual order (e.g. to the left of their
+            base character in RTL runs) and that it adjusts the glyphs used to render
+            mirrored characters that are in RTL runs so that they render appropriately.
+            </remarks>
+            <author>Doug Felt</author>
+            <author>Roozbeh Pournader</author>
+            <author>Asmus Freytag</author>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.L">
+            <summary>Left-to-right</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.LRE">
+            <summary>Left-to-Right Embedding</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.LRO">
+            <summary>Left-to-Right Override</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.R">
+            <summary>Right-to-Left</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.AL">
+            <summary>Right-to-Left Arabic</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.RLE">
+            <summary>Right-to-Left Embedding</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.RLO">
+            <summary>Right-to-Left Override</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.PDF">
+            <summary>Pop Directional Format</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.EN">
+            <summary>European Number</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.ES">
+            <summary>European Number Separator</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.ET">
+            <summary>European Number Terminator</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.AN">
+            <summary>Arabic Number</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.CS">
+            <summary>Common Number Separator</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.NSM">
+            <summary>Non-Spacing Mark</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.BN">
+            <summary>Boundary Neutral</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.B">
+            <summary>Paragraph Separator</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.S">
+            <summary>Segment Separator</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.WS">
+            <summary>Whitespace</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.ON">
+            <summary>Other Neutrals</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.LRI">
+            <summary>Left-to-Right Isolate</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.RLI">
+            <summary>Right-to-Left Isolate</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.FSI">
+            <summary>First-Strong Isolate</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.PDI">
+            <summary>Pop Directional Isolate</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.TYPE_MIN">
+            <summary>Minimum bidi type value.</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.TYPE_MAX">
+            <summary>Maximum bidi type value.</summary>
+        </member>
+        <member name="F:iText.Typography.Bidi.BidiAlgorithm.typenames">
+            <summary>Shorthand names of bidi type values, for error reporting.</summary>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.#ctor(System.Byte[],System.Byte[],System.Int32[])">
+            <summary>Initialize using several arrays, then run the algorithm</summary>
+            <param name="types">
+            Array of types ranging from TYPE_MIN to TYPE_MAX inclusive
+            and representing the direction codes of the characters in the text.
+            </param>
+            <param name="pairTypes">
+            Array of paired bracket types ranging from 0 (none) to 2 (closing)
+            of the characters
+            </param>
+            <param name="pairValues">
+            Array identifying which set of matching bracket characters
+            as defined in BidiPBAReference (note, both opening and closing
+            bracket get the same value if they are part of the same canonical "set"
+            or pair)
+            </param>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.#ctor(System.Byte[],System.Byte[],System.Int32[],System.Byte)">
+            <summary>
+            Initialize using several arrays of direction and other types and an externally supplied
+            paragraph embedding level.
+            </summary>
+            <remarks>
+            Initialize using several arrays of direction and other types and an externally supplied
+            paragraph embedding level. The embedding level may be  0, 1 or 2.
+            <para />
+            2 means to apply the default algorithm (rules P2 and P3), 0 is for LTR
+            paragraphs, and 1 is for RTL paragraphs.
+            </remarks>
+            <param name="types">the types array</param>
+            <param name="pairTypes">the paired bracket types array</param>
+            <param name="pairValues">the paired bracket values array</param>
+            <param name="paragraphEmbeddingLevel">the externally supplied paragraph embedding level.</param>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.RunAlgorithm">
+            <summary>The algorithm.</summary>
+            <remarks>
+            The algorithm. Does not include line-based processing (Rules L1, L2).
+            These are applied later in the line-based phase of the algorithm.
+            </remarks>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.DetermineMatchingIsolates">
+            <summary>Determine the matching PDI for each isolate initiator and vice versa.</summary>
+            <remarks>
+            Determine the matching PDI for each isolate initiator and vice versa.
+            <para />
+            Definition BD9.
+            <para />
+            At the end of this function:
+            <list type="bullet">
+            <item><description>The member variable matchingPDI is set to point to the index of the
+            matching PDI character for each isolate initiator character. If there is
+            no matching PDI, it is set to the length of the input text. For other
+            characters, it is set to -1.
+            </description></item>
+            <item><description>The member variable matchingIsolateInitiator is set to point to the
+            index of the matching isolate initiator character for each PDI character.
+            If there is no matching isolate initiator, or the character is not a PDI,
+            it is set to -1.
+            </description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.DetermineParagraphEmbeddingLevel(System.Int32,System.Int32)">
+            <summary>Determines the paragraph level based on rules P2, P3.</summary>
+            <remarks>
+            Determines the paragraph level based on rules P2, P3. This is also used
+            in rule X5c to find if an FSI should resolve to LRI or RLI.
+            </remarks>
+            <param name="startIndex">the index of the beginning of the substring</param>
+            <param name="endIndex">the index of the character after the end of the string</param>
+            <returns>
+            the resolved paragraph direction of the substring limited by
+            startIndex and endIndex
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.DetermineExplicitEmbeddingLevels">
+            <summary>Determine explicit levels using rules X1 - X8</summary>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.IsolatingRunSequence.#ctor(iText.Typography.Bidi.BidiAlgorithm,System.Int32[])">
+            <summary>
+            Rule X10, second bullet: Determine the start-of-sequence (sos) and end-of-sequence (eos) types,
+            either L or R, for each isolating run sequence.
+            </summary>
+            <param name="inputIndexes"/>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.IsolatingRunSequence.ResolvePairedBrackets">
+            <summary>Resolving bidi paired brackets  Rule N0</summary>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.IsolatingRunSequence.ResolveWeakTypes">
+            <summary>Resolving weak types Rules W1-W7.</summary>
+            <remarks>
+            Resolving weak types Rules W1-W7.
+            <para />
+            Note that some weak types (EN, AN) remain after this processing is
+            complete.
+            </remarks>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.IsolatingRunSequence.ResolveNeutralTypes">
+            <summary>6) resolving neutral types Rules N1-N2.</summary>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.IsolatingRunSequence.ResolveImplicitLevels">
+            <summary>7) resolving implicit embedding levels Rules I1, I2.</summary>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.IsolatingRunSequence.FindRunLimit(System.Int32,System.Int32,System.Byte[])">
+            <summary>
+            Return the limit of the run consisting only of the types in validSet
+            starting at index.
+            </summary>
+            <remarks>
+            Return the limit of the run consisting only of the types in validSet
+            starting at index. This checks the value at index, and will return
+            index if that value is not in validSet.
+            </remarks>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.IsolatingRunSequence.SetTypes(System.Int32,System.Int32,System.Byte)">
+            <summary>Set types from start up to (but not including) limit to newType.</summary>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.IsolatingRunSequence.AssertOnly(System.Byte[])">
+            <summary>Algorithm validation.</summary>
+            <remarks>
+            Algorithm validation. Assert that all values in types are in the
+            provided set.
+            </remarks>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.DetermineLevelRuns">
+            <summary>Determines the level runs.</summary>
+            <remarks>
+            Determines the level runs. Rule X9 will be applied in determining the
+            runs, in the way that makes sure the characters that are supposed to be
+            removed are not included in the runs.
+            </remarks>
+            <returns>
+            an array of level runs. Each level run is described as an array
+            of indexes into the input string.
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.DetermineIsolatingRunSequences">
+            <summary>Definition BD13.</summary>
+            <remarks>Definition BD13. Determine isolating run sequences.</remarks>
+            <returns>an array of isolating run sequences.</returns>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.AssignLevelsToCharactersRemovedByX9">
+            <summary>Assign level information to characters removed by rule X9.</summary>
+            <remarks>
+            Assign level information to characters removed by rule X9. This is for
+            ease of relating the level information to the original input data. Note
+            that the levels assigned to these codes are arbitrary, they're chosen so
+            as to avoid breaking level runs.
+            </remarks>
+            <returns>
+            the length of the data (original length of types array supplied
+            to constructor)
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.GetLevels(System.Int32[])">
+            <summary>
+            Return levels array breaking lines at offsets in linebreaks.<br />
+            Rule L1.
+            </summary>
+            <remarks>
+            Return levels array breaking lines at offsets in linebreaks.<br />
+            Rule L1.
+            <para />
+            The returned levels array contains the resolved level for each bidi code
+            passed to the constructor.
+            <para />
+            The linebreaks array must include at least one value. The values must be
+            in strictly increasing order (no duplicates) between 1 and the length of
+            the text, inclusive. The last value must be the length of the text.
+            </remarks>
+            <param name="linebreaks">the offsets at which to break the paragraph</param>
+            <returns>the resolved levels of the text</returns>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.GetReordering(System.Int32[])">
+            <summary>Return reordering array breaking lines at offsets in linebreaks.</summary>
+            <remarks>
+            Return reordering array breaking lines at offsets in linebreaks.
+            <para />
+            The reordering array maps from a visual index to a logical index. Lines
+            are concatenated from left to right. So for example, the fifth character
+            from the left on the third line is
+            <para />
+            <c>getReordering(linebreaks)[linebreaks[1] + 4]</c>
+            <para />
+            (linebreaks[1] is the position after the last character of the second
+            line, which is also the index of the first character on the third line,
+            and adding four gets the fifth character from the left).
+            <para />
+            The linebreaks array must include at least one value. The values must be
+            in strictly increasing order (no duplicates) between 1 and the length of
+            the text, inclusive. The last value must be the length of the text.
+            </remarks>
+            <param name="linebreaks">the offsets at which to break the paragraph.</param>
+            <returns>reordering array breaking lines at offsets in linebreaks</returns>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.ComputeMultilineReordering(System.Byte[],System.Int32[])">
+            <summary>Return multiline reordering array for a given level array.</summary>
+            <remarks>
+            Return multiline reordering array for a given level array. Reordering
+            does not occur across a line break.
+            </remarks>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.ComputeReordering(System.Byte[])">
+            <summary>Return reordering array for a given level array.</summary>
+            <remarks>
+            Return reordering array for a given level array. This reorders a single
+            line. The reordering is a visual to logical map. For example, the
+            leftmost char is string.charAt(order[0]). Rule L2.
+            </remarks>
+            <param name="levels">a given level array</param>
+            <returns>reordering array</returns>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.GetBaseLevel">
+            <summary>Return the base level of the paragraph.</summary>
+            <returns>the base level of the paragraph</returns>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.IsWhitespace(System.Byte)">
+            <summary>
+            Return true if the type is considered a whitespace type for the line
+            break rules.
+            </summary>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.IsRemovedByX9(System.Byte)">
+            <summary>Return true if the type is one of the types removed in X9.</summary>
+            <remarks>
+            Return true if the type is one of the types removed in X9.
+            Made public so callers can duplicate the effect.
+            </remarks>
+            <param name="biditype">biditype</param>
+            <returns>true if the type is one of the types removed in X9</returns>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.TypeForLevel(System.Int32)">
+            <summary>Return the strong type (L or R) corresponding to the level.</summary>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.SetLevels(System.Byte[],System.Int32,System.Int32,System.Byte)">
+            <summary>Set levels from start up to (but not including) limit to newLevel.</summary>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.ValidateTypes(System.Byte[])">
+            <summary>Throw exception if type array is invalid.</summary>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.ValidateParagraphEmbeddingLevel(System.Byte)">
+            <summary>Throw exception if paragraph embedding level is invalid.</summary>
+            <remarks>
+            Throw exception if paragraph embedding level is invalid. Special
+            allowance for implicitEmbeddinglevel so that default processing of the
+            paragraph embedding level as implicit can still be performed when
+            using this API.
+            </remarks>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.ValidateLineBreaks(System.Int32[],System.Int32)">
+            <summary>Throw exception if line breaks array is invalid.</summary>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.ValidatePbTypes(System.Byte[])">
+            <summary>Throw exception if pairTypes array is invalid</summary>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.ValidatePbValues(System.Int32[],System.Byte[])">
+            <summary>
+            Throw exception if pairValues array is invalid or doesn't match pairTypes in length
+            Unfortunately there's little we can do in terms of validating the values themselves
+            </summary>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiAlgorithm.AnalyzeInput(System.Byte[],System.Byte[],System.Int32[],System.Byte)">
+            <summary>
+            static entry point for testing using several arrays of direction and other types and an externally supplied
+            paragraph embedding level.
+            </summary>
+            <remarks>
+            static entry point for testing using several arrays of direction and other types and an externally supplied
+            paragraph embedding level. The embedding level may be 0, 1 or 2.
+            <para />
+            2 means to apply the default algorithm (rules P2 and P3), 0 is for LTR
+            paragraphs, and 1 is for RTL paragraphs.
+            </remarks>
+            <param name="types">the directional types array</param>
+            <param name="pairTypes">the paired bracket types array</param>
+            <param name="pairValues">the paired bracket values array</param>
+            <param name="paragraphEmbeddingLevel">the externally supplied paragraph embedding level.</param>
+            <returns>static entry point for testing</returns>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiPBAAlgorithm.MatchOpener(System.Int32[],System.Int32,System.Int32)">
+            <summary>
+            check whether characters at putative positions could form a bracket pair
+            based on the paired bracket character properties
+            </summary>
+            <param name="pairValues">
+            - unique ID for the pair (or set) of canonically matched
+            brackets
+            </param>
+            <param name="ichOpener">- position of the opening bracket</param>
+            <param name="ichCloser">- position of the closing bracket</param>
+            <returns>true if match</returns>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiPBAAlgorithm.RemoveHead(System.Collections.Generic.LinkedList{System.Int32},System.Int32)">
+            <summary>removes any list elements from First to index</summary>
+            <param name="list"/>
+            <param name="index"/>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiPBAAlgorithm.LocateBrackets(System.Byte[],System.Int32[])">
+            <summary>
+            locate all Paired Bracket characters and determine whether they form
+            pairs according to BD16.
+            </summary>
+            <remarks>
+            locate all Paired Bracket characters and determine whether they form
+            pairs according to BD16. This implementation uses a linked list instead
+            of a stack, because, while elements are added at the front (like a push)
+            there are not generally removed in atomic 'pop' operations, reducing the
+            benefit of the stack archetype.
+            </remarks>
+            <param name="pairTypes">- array of paired Bracket types</param>
+            <param name="pairValues">
+            - array of characters codes such that for all bracket
+            characters it contains the same unique value if their
+            Bidi_Paired_Bracket properties map between them. For
+            brackets hat have canonical decompositions (singleton
+            mappings) it contains the same value as for the canonically
+            decomposed character. For characters that have paired
+            bracket type of "n" the value is ignored.
+            </param>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiPBAAlgorithm.GetStrongTypeN0(System.Int32)">
+            <summary>map character's directional code to strong type as required by rule N0</summary>
+            <param name="ich">- index into array of directional codes</param>
+            <returns>R or L for strong directional codes, ON for anything else</returns>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiPBAAlgorithm.ClassifyPairContent(iText.Typography.Bidi.BidiPBAAlgorithm.BracketPair,System.Byte)">
+            <summary>determine which strong types are contained inside a Bracket Pair</summary>
+            <param name="pairedLocation">- a bracket pair</param>
+            <param name="dirEmbed">- the embedding direction</param>
+            <returns>
+            ON if no strong type found, otherwise return the embedding
+            direction, unless the only strong type found is opposite the
+            embedding direction, in which case that is returned
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiPBAAlgorithm.ClassBeforePair(iText.Typography.Bidi.BidiPBAAlgorithm.BracketPair)">
+            <summary>determine which strong types are present before a Bracket Pair</summary>
+            <param name="pairedLocation">- a bracket pair</param>
+            <returns>R or L if strong type found, otherwise ON</returns>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiPBAAlgorithm.AssignBracketType(iText.Typography.Bidi.BidiPBAAlgorithm.BracketPair,System.Byte)">
+            <summary>Implement rule N0 for a single bracket pair</summary>
+            <param name="pairedLocation">- a bracket pair</param>
+            <param name="dirEmbed">- the embedding direction</param>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiPBAAlgorithm.ResolvePairedBrackets(System.Int32[],System.Byte[],System.Byte[],System.Int32[],System.Byte,System.Byte)">
+            <summary>runAlgorithm - runs the paired bracket part of the UBA algorithm</summary>
+            <param name="indexes">- indexes into the original string</param>
+            <param name="codes">
+            - bidi classes (directional codes) for each character in the
+            original string
+            </param>
+            <param name="pairTypes">
+            - array of paired bracket types for each character in the
+            original string
+            </param>
+            <param name="pairValues">
+            - array of unique integers identifying which pair of brackets
+            (or canonically equivalent set) a bracket character
+            belongs to. For example in the string
+            <c>"[Test(s)&gt;"</c>
+            the
+            characters
+            <c>"("</c>
+            and
+            <c>")"</c>
+            would share one value and
+            <c>"["</c>
+            and
+            <c>"&gt;"</c>
+            share another (assuming that
+            <c>"]"</c>
+            and
+            <c>"&gt;"</c>
+            are canonically equivalent).
+            Characters that have pairType = n might always get pairValue = 0.
+            <para />
+            The actual values are no important as long as they are unique,
+            so one way to assign them is to use the code position value for
+            the closing element of a paired set for both opening and closing
+            character - paying attention to first applying canonical decomposition.
+            </param>
+            <param name="sos">- direction for sos</param>
+            <param name="level">- the embedding level</param>
+        </member>
+        <member name="M:iText.Typography.Bidi.BidiPBAAlgorithm.RunAlgorithm(System.Byte[],System.Byte[],System.Int32[],System.Byte,System.Byte)">
+            <summary>Entry point for testing the BPA algorithm in isolation.</summary>
+            <remarks>
+            Entry point for testing the BPA algorithm in isolation. Does not use an indexes
+            array for indirection. Actual work is carried out by resolvePairedBrackets.
+            </remarks>
+            <param name="codes">- bidi classes (directional codes) for each character</param>
+            <param name="pairTypes">- array of paired bracket type values for each character</param>
+            <param name="pairValues">
+            - array of unique integers identifying which bracket pair
+            see resolvePairedBrackets for details.
+            </param>
+            <param name="sos">- direction for sos</param>
+            <param name="level">- the embedding level</param>
+        </member>
+        <member name="T:iText.Typography.Config.AdvancedScriptsConfig">
+            <summary>
+            A wrapper class for
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            instances,
+            that gives more control over the features to apply and their order.
+            </summary>
+        </member>
+        <member name="M:iText.Typography.Config.AdvancedScriptsConfig.#ctor(iText.Typography.Config.IFeaturesConfig)">
+            <summary>
+            Wraps around the given
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>.
+            </summary>
+            <remarks>
+            Wraps around the given
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>.
+            After wrapping all the features and scripts from the original
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            are preserved in this
+            <see cref="T:iText.Typography.Config.AdvancedScriptsConfig"/>
+            instance.
+            <para />
+            Features list can be modified via
+            <see cref="M:iText.Typography.Config.AdvancedScriptsConfig.GetFeaturesList"/>
+            method.
+            </remarks>
+            <param name="featureConfig">
+            the
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            to wrap around.
+            </param>
+        </member>
+        <member name="M:iText.Typography.Config.AdvancedScriptsConfig.#ctor(System.Collections.Generic.ICollection{iText.IO.Util.UnicodeScript})">
+            <summary>
+            Creates an
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            instance for the given scripts with
+            empty features list.
+            </summary>
+            <remarks>
+            Creates an
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            instance for the given scripts with
+            empty features list.
+            <para />
+            Be aware that if this configuration is applied, it overrides any default
+            processing of the scripts that are defined in this
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>.
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            allows to list OpenType features that are applied
+            to certain scripts in given order if they are defined in font. Most of the
+            complex scripts require more sophisticated approach than just blind application
+            of features to the whole text, thus use this class with caution.
+            </remarks>
+            <param name="scripts">
+            a
+            <see cref="!:Java.Util.Set&lt;E&gt;"/>
+            of scripts which are to be configured by the new
+            <see cref="T:iText.Typography.Config.AdvancedScriptsConfig"/>
+            instance.
+            </param>
+        </member>
+        <member name="M:iText.Typography.Config.AdvancedScriptsConfig.GetFeaturesList">
+            <summary>Gives full access to the features list to be applied.</summary>
+            <returns>
+            a modifiable
+            <see cref="!:System.Collections.IList&lt;E&gt;"/>
+            of OpenType feature tags.
+            </returns>
+        </member>
+        <member name="T:iText.Typography.Config.IFeaturesConfig">
+            <summary>
+            An interface for specifying the simple list of features to be applied to certain scripts if they are defined
+            in font.
+            </summary>
+        </member>
+        <member name="M:iText.Typography.Config.IFeaturesConfig.GetScripts">
+            <summary>
+            Gets scripts that are affected by this instance of
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>.
+            </summary>
+            <returns>
+            an unmodifiable
+            <see cref="!:Java.Util.Set&lt;E&gt;"/>
+            of scripts which processing is defined by this
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>.
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Config.IFeaturesConfig.ListFeatures">
+            <summary>
+            Enlists OpenType features that are applied in given order to the scripts defined by
+            <see cref="M:iText.Typography.Config.IFeaturesConfig.GetScripts"/>.
+            </summary>
+            <returns>
+            an unmodifiable
+            <see cref="!:System.Collections.IList&lt;E&gt;"/>
+            of OpenType features tags to be applied.
+            </returns>
+        </member>
+        <member name="T:iText.Typography.Config.LatinScriptConfig">
+            <summary>
+            An
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            implementation for convenient configuration of
+            <see cref="!:iText.IO.Util.UnicodeScript?.LATIN"/>
+            script.
+            </summary>
+        </member>
+        <member name="T:iText.Typography.Config.StandardScriptConfig">
+            <summary>
+            An
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            implementation for convenient configuration of any standard script.
+            </summary>
+            <remarks>
+            An
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            implementation for convenient configuration of any standard script.
+            <para />
+            Standard Script - any non-complex script; any script that does not require re-ordering or contextual analysis in the shaping process.
+            According to Open Font File specification such scripts are
+            <see cref="!:iText.IO.Util.UnicodeScript?.ARMENIAN"/>
+            ,
+            <see cref="!:iText.IO.Util.UnicodeScript?.CYRILLIC"/>
+            ,
+            <see cref="!:iText.IO.Util.UnicodeScript?.GEORGIAN"/>
+            ,
+            <see cref="!:iText.IO.Util.UnicodeScript?.GREEK"/>
+            ,
+            <see cref="!:iText.IO.Util.UnicodeScript?.LATIN"/>
+            ,
+            <see cref="!:iText.IO.Util.UnicodeScript?.RUNIC"/>
+            ,
+            <see cref="!:iText.IO.Util.UnicodeScript?.OGHAM"/>.
+            <para />
+            See also
+            <see cref="F:iText.Typography.Config.StandardScriptConfig.STANDARD_SCRIPTS"/>
+            set.
+            </remarks>
+            <seealso><a href="https://docs.microsoft.com/en-gb/typography/script-development/standard">Developing OpenType Fonts for Standard Scripts at docs.microsoft.com</a>
+                </seealso>
+        </member>
+        <member name="M:iText.Typography.Config.StandardScriptConfig.SetLigaturesApplying(System.Boolean)">
+            <summary>Enables or disables standard ligatures substitution.</summary>
+            <remarks>
+            Enables or disables standard ligatures substitution.
+            <para />
+            If enabled the "liga" feature tag will be present in the list of
+            features to be applied (see
+            <see cref="M:iText.Typography.Config.IFeaturesConfig.ListFeatures"/>
+            ).
+            It will appear after custom features added by
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.PrependCustomFeature(System.String)"/>
+            (if any)
+            and before custom features added by
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.AppendCustomFeature(System.String)"/>
+            (if any).
+            The order of not custom features is fixed and defined by the Open Font File specification.
+            <para />
+            By default it's disabled.
+            </remarks>
+            <param name="enabled">
+            
+            <see langword="true"/>
+            in order to enable the feature, otherwise
+            <see langword="false"/>.
+            </param>
+            <returns>
+            this
+            <see cref="T:iText.Typography.Config.StandardScriptConfig"/>
+            instance.
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Config.StandardScriptConfig.SetCharacterCompositionDecompositionSubstitution(System.Boolean)">
+            <summary>Enables or disables characters composition/decomposition substitution.</summary>
+            <remarks>
+            Enables or disables characters composition/decomposition substitution.
+            <para />
+            If enabled the "ccmp" feature tag will be present in the list of
+            features to be applied (see
+            <see cref="M:iText.Typography.Config.IFeaturesConfig.ListFeatures"/>
+            ).
+            It will appear after custom features added by
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.PrependCustomFeature(System.String)"/>
+            (if any)
+            and before custom features added by
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.AppendCustomFeature(System.String)"/>
+            (if any).
+            The order of not custom features is fixed and defined by the Open Font File specification.
+            <para />
+            By default it's disabled.
+            </remarks>
+            <param name="enabled">
+            
+            <see langword="true"/>
+            in order to enable the feature, otherwise
+            <see langword="false"/>.
+            </param>
+            <returns>
+            this
+            <see cref="T:iText.Typography.Config.StandardScriptConfig"/>
+            instance.
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Config.StandardScriptConfig.SetKerningFeature(System.Boolean)">
+            <summary>Enables or disables pair kerning.</summary>
+            <remarks>
+            Enables or disables pair kerning.
+            <para />
+            If enabled the "kern" feature tag will be present in the list of
+            features to be applied (see
+            <see cref="M:iText.Typography.Config.IFeaturesConfig.ListFeatures"/>
+            ).
+            It will appear after custom features added by
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.PrependCustomFeature(System.String)"/>
+            (if any)
+            and before custom features added by
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.AppendCustomFeature(System.String)"/>
+            (if any).
+            The order of not custom features is fixed and defined by the Open Font File specification.
+            <para />
+            By default it's disabled.
+            </remarks>
+            <param name="enabled">
+            
+            <see langword="true"/>
+            in order to enable the feature,
+            <see langword="false"/>
+            - to disable.
+            </param>
+            <returns>
+            this
+            <see cref="T:iText.Typography.Config.StandardScriptConfig"/>
+            instance.
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Config.StandardScriptConfig.SetDistancesAdjustment(System.Boolean)">
+            <summary>Enables or disables distance adjustment.</summary>
+            <remarks>
+            Enables or disables distance adjustment.
+            <para />
+            If enabled the "dist" feature tag will be present in the list of
+            features to be applied (see
+            <see cref="M:iText.Typography.Config.IFeaturesConfig.ListFeatures"/>
+            ).
+            It will appear after custom features added by
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.PrependCustomFeature(System.String)"/>
+            (if any)
+            and before custom features added by
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.AppendCustomFeature(System.String)"/>
+            (if any).
+            The order of not custom features is fixed and defined by the Open Font File specification.
+            <para />
+            By default it's disabled.
+            </remarks>
+            <param name="enabled">
+            
+            <see langword="true"/>
+            in order to enable the feature,
+            <see langword="false"/>
+            - to disable.
+            </param>
+            <returns>
+            this
+            <see cref="T:iText.Typography.Config.StandardScriptConfig"/>
+            instance.
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Config.StandardScriptConfig.SetMarkToBasePositioning(System.Boolean)">
+            <summary>Enables or disables mark to base positioning.</summary>
+            <remarks>
+            Enables or disables mark to base positioning. It's usually used for combining diacritics with the base glyphs.
+            <para />
+            If enabled the "liga" feature tag will be present in the list of
+            features to be applied (see
+            <see cref="M:iText.Typography.Config.IFeaturesConfig.ListFeatures"/>
+            ).
+            It will appear after custom features added by
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.PrependCustomFeature(System.String)"/>
+            (if any)
+            and before custom features added by
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.AppendCustomFeature(System.String)"/>
+            (if any).
+            The order of not custom features is fixed and defined by the Open Font File specification.
+            <para />
+            By default it's enabled.
+            </remarks>
+            <param name="enabled">
+            
+            <see langword="true"/>
+            in order to enable the feature,
+            <see langword="false"/>
+            - to disable.
+            </param>
+            <returns>
+            this
+            <see cref="T:iText.Typography.Config.StandardScriptConfig"/>
+            instance.
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Config.StandardScriptConfig.SetMarkToMarkPositioning(System.Boolean)">
+            <summary>Enables or disables mark to mark positioning.</summary>
+            <remarks>
+            Enables or disables mark to mark positioning. It's usually used for combining diacritics with other diacritics.
+            <para />
+            If enabled the "liga" feature tag will be present in the list of
+            features to be applied (see
+            <see cref="M:iText.Typography.Config.IFeaturesConfig.ListFeatures"/>
+            ).
+            It will appear after custom features added by
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.PrependCustomFeature(System.String)"/>
+            (if any)
+            and before custom features added by
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.AppendCustomFeature(System.String)"/>
+            (if any).
+            The order of not custom features is fixed and defined by the Open Font File specification.
+            <para />
+            By default it's enabled.
+            </remarks>
+            <param name="enabled">
+            
+            <see langword="true"/>
+            in order to enable the feature,
+            <see langword="false"/>
+            - to disable.
+            </param>
+            <returns>
+            this
+            <see cref="T:iText.Typography.Config.StandardScriptConfig"/>
+            instance.
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Config.StandardScriptConfig.AppendCustomFeature(System.String)">
+            <summary>Adds a custom feature to the end of the list of features that are to be applied.</summary>
+            <remarks>
+            Adds a custom feature to the end of the list of features that are to be applied.
+            <para />
+            See also
+            <see cref="M:iText.Typography.Config.IFeaturesConfig.ListFeatures"/>
+            </remarks>
+            <param name="feature">the feature tag denoting feature in the font.</param>
+            <returns>
+            this
+            <see cref="T:iText.Typography.Config.StandardScriptConfig"/>
+            instance.
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Config.StandardScriptConfig.PrependCustomFeature(System.String)">
+            <summary>Adds a custom feature to the beginning of the list of features that are to be applied.</summary>
+            <remarks>
+            Adds a custom feature to the beginning of the list of features that are to be applied.
+            <para />
+            See also
+            <see cref="M:iText.Typography.Config.IFeaturesConfig.ListFeatures"/>
+            </remarks>
+            <param name="feature">the feature tag denoting feature in the font.</param>
+            <returns>
+            this
+            <see cref="T:iText.Typography.Config.StandardScriptConfig"/>
+            instance.
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Config.StandardScriptConfig.RemoveCustomFeature(System.String)">
+            <summary>
+            Removes custom feature added to the features list
+            via
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.AppendCustomFeature(System.String)"/>
+            or
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.PrependCustomFeature(System.String)"/>.
+            </summary>
+            <remarks>
+            Removes custom feature added to the features list
+            via
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.AppendCustomFeature(System.String)"/>
+            or
+            <see cref="M:iText.Typography.Config.StandardScriptConfig.PrependCustomFeature(System.String)"/>.
+            <para />
+            See also
+            <see cref="M:iText.Typography.Config.IFeaturesConfig.ListFeatures"/>
+            </remarks>
+            <param name="feature">the feature tag denoting feature in the font.</param>
+            <returns>
+            this
+            <see cref="T:iText.Typography.Config.StandardScriptConfig"/>
+            instance.
+            </returns>
+        </member>
+        <member name="T:iText.Typography.Config.TypographyConfigurator">
+            <summary>
+            Provides a way to configure certain aspects of pdfCalligraph processing,
+            like applying OpenType features to specific scripts
+            inside some layout elements (whole document, paragraph, text chunk etc).
+            </summary>
+        </member>
+        <member name="M:iText.Typography.Config.TypographyConfigurator.AddFeatureConfig(iText.Typography.Config.IFeaturesConfig)">
+            <summary>
+            Adds
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            instance into consideration for text processing.
+            </summary>
+            <remarks>
+            Adds
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            instance into consideration for text processing.
+            <para />
+            If two added
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            are associated with the same script, only the
+            one that was added latest is applied for this script. When several scripts are associated with
+            the single
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            , it should rather mean that those scripts are processed in exactly the same
+            manner, rather than they have some mutual features.
+            </remarks>
+            <param name="featureConfig">a configuration to be applied.</param>
+            <returns>
+            this
+            <see cref="T:iText.Typography.Config.TypographyConfigurator"/>
+            instance.
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Config.TypographyConfigurator.GetFeatureConfig(System.Nullable{iText.IO.Util.UnicodeScript})">
+            <summary>
+            Finds
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            that was already set for the given script.
+            </summary>
+            <param name="script">
+            an
+            <see cref="!:iText.IO.Util.UnicodeScript?"/>
+            for which corresponding configuration is searched.
+            </param>
+            <returns>
+            the
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>
+            for the given
+            <see cref="!:iText.IO.Util.UnicodeScript?"/>
+            , or null if no configuration was set.
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Config.TypographyConfigurator.GetConfiguredScripts">
+            <summary>
+            Gets scripts that are affected by this instance of
+            <see cref="T:iText.Typography.Config.TypographyConfigurator"/>.
+            </summary>
+            <returns>
+            a
+            <see cref="!:Java.Util.Set&lt;E&gt;"/>
+            of scripts which processing is defined by some
+            <see cref="T:iText.Typography.Config.IFeaturesConfig"/>.
+            </returns>
+        </member>
+        <member name="M:iText.Typography.Ordering.Indic.IndicCluster.GetPreviousGlyphUnicode">
+            <summary>Gets the unicode of the original glyphline's glyph located right before the cluster.</summary>
+            <returns>the unicode of the original glyphline's glyph located right before the cluster</returns>
+        </member>
+        <member name="M:iText.Typography.Ordering.Indic.IndicCluster.SetPreviousGlyphUnicode(System.Int32)">
+            <summary>Sets the unicode of the original glyphline's glyph located right before the cluster.</summary>
+            <param name="previousGlyphUnicode">the unicode of the original glyphline's glyph located right before the cluster
+                </param>
+        </member>
+        <member name="M:iText.Typography.Shaping.Shaper.ApplyKerning(iText.IO.Font.FontProgram,iText.IO.Font.Otf.GlyphLine)">
+            <summary>
+            Applies kerning to this
+            <see cref="T:iText.IO.Font.Otf.GlyphLine"/>
+            using advance glyph transformations
+            </summary>
+            <param name="fontProgram">fontProgram</param>
+            <param name="text">
+            the
+            <see cref="T:iText.IO.Font.Otf.GlyphLine"/>
+            to be kerned
+            </param>
+            <returns>
+            
+            <see langword="true"/>
+            , if any kern positioning applied
+            </returns>
+        </member>
+        <member name="T:iText.Typography.Util.CalligraphProductInfo">
+            <author>Michael Demey</author>
+        </member>
+    </members>
+</doc>

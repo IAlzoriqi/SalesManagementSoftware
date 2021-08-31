@@ -1,0 +1,420 @@
+﻿<UserControl x:Class="Pizzaria1.UCShowOrder"           Loaded="UserControl_Loaded"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Pizzaria1"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+
+             mc:Ignorable="d" Width="1000" Height="710.576">
+
+
+
+    <UserControl.Resources>
+        <!-- Having CommandParameter is crucial here -->
+        <ContextMenu x:Key="contextMenu">
+            <MenuItem Header="View"
+                     
+                      CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}"/>
+            <MenuItem Header="Edit"
+                    
+                      CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}" />
+            <MenuItem Header="Delete"
+                    
+                      CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}"/>
+        </ContextMenu>
+    </UserControl.Resources>
+
+    <Grid Margin="0,0,-0.2,10.2">
+
+        <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Top" Margin="10,50,-5.8,0" RenderTransformOrigin="0.5,0.5">
+
+            <Label x:Name="label_Copy6" TextElement.FontWeight="Heavy" Foreground="#FF2196F3" Content=" الايدي " HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="5,2,0.2,-0.6" FontSize="14" Width="62"/>
+            <Label x:Name="label_Copy7" Foreground="#FF2196F3" Content="اسم العميل" HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="5,2,0.2,-0.6" FontSize="14" Width="89"/>
+            <Label x:Name="label_Copy8" Foreground="#FF2196F3" Content="رقم التلفون" HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="5,2,0.2,-0.6" FontSize="14" Width="98"/>
+
+            <Label x:Name="label_Copy9" Foreground="#FF2196F3" Content="المحافظة" HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="5,2,0.2,-0.6" FontSize="14" Width="96"/>
+            <Label x:Name="label_Copy13" Foreground="#FF2196F3" Content="الشارع" HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="5,2,0.2,-0.6" FontSize="14" Width="100"/>
+
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Top" Margin="10,75,-5.6,0" RenderTransformOrigin="0.5,0.5">
+
+            <TextBox x:Name="txtiduser" x:FieldModifier="public"   IsEnabled="False" HorizontalAlignment="Center" Height="29" Margin="5,2,0.2,-0.6" TextWrapping="Wrap"  VerticalAlignment="Top" Width="74" Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0 0 0 3"/>
+
+            <TextBox x:Name="txtnamecombnyuser" x:FieldModifier="public"  IsEnabled="False" HorizontalAlignment="Center" Height="29" Margin="5,2,0.2,-0.6" TextWrapping="Wrap"  VerticalAlignment="Top" Width="73" Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0 0 0 3"/>
+            <TextBox x:Name="txtphonNumberuser" x:FieldModifier="public" IsEnabled="False" HorizontalAlignment="Center" Height="29" Margin="5,2,0.2,-0.6" TextWrapping="Wrap"  VerticalAlignment="Top" Width="77" Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0 0 0 3"/>
+            <TextBox x:Name="txtcityuser" x:FieldModifier="public"  IsEnabled="False" HorizontalAlignment="Center" Height="29" Margin="5,2,0.2,-0.6" TextWrapping="Wrap"  VerticalAlignment="Top" Width="49" Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0 0 0 3"/>
+            <TextBox x:Name="txtstreetuser" x:FieldModifier="public"  IsEnabled="False" HorizontalAlignment="Center" Height="29" Margin="5,2,0.2,-0.6" TextWrapping="Wrap"  VerticalAlignment="Top" Width="66" Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0 0 0 3"/>
+
+            <Button x:Name="btninsertSuplier" x:FieldModifier="public" Click="btninsertSuplier_Click"  Content="اضافة العميل" Margin="5,2,0.2,-0.6" VerticalAlignment="Center"/>
+
+        </StackPanel>
+
+
+
+        <StackPanel Orientation="Horizontal"  Height="55" VerticalAlignment="Top" Margin="10,257,-5.8,0" RenderTransformOrigin="0.5,0.5">
+            <Label x:Name="label_Copy10"   HorizontalContentAlignment="Center"
+                   Foreground="#FF2196F3" 
+                   Content=" الايدي" 
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="10,10,0.10,10" FontSize="14" RenderTransformOrigin="0.917,0.907"/>
+
+            <Label x:Name="label_Copy1056"   HorizontalContentAlignment="Center"
+                   Foreground="#FF2196F3" 
+                   Content=" AMOUNT" 
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="10,10,0.10,10" FontSize="14" RenderTransformOrigin="0.917,0.907"/>
+
+            <Label x:Name="label_Copy16056"   HorizontalContentAlignment="Center"
+                   Foreground="#FF2196F3" 
+                   Content=" DISCOUNT" 
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="10,10,0.10,10" FontSize="14" RenderTransformOrigin="0.917,0.907"/>
+
+            <Label x:Name="label_Copy1033"   HorizontalContentAlignment="Center"
+                   Foreground="#FF2196F3" 
+                   Content=" ايدي المنتجات " 
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="10,10,0.10,10" FontSize="14" RenderTransformOrigin="0.917,0.907"/>
+
+            <Label x:Name="label_Copy1"   HorizontalContentAlignment="Center"
+                   Foreground="#FF2196F3" 
+                   Content=" وصف الفاتورة " HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="10,10,0.1,0" FontSize="14" Width="193"/>
+
+            <Label x:Name="label_Copy3"    HorizontalContentAlignment="Center"
+                   Foreground="#FF2196F3"
+                   Content="  سعر الحبه" HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="10,10,0.10,10" FontSize="14"/>
+            <Label x:Name="label_Copy2"
+                   Foreground="#FF2196F3"   HorizontalContentAlignment="Center"
+                   Content=" الكمية" HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="10,10,0.10,10" FontSize="14"/>
+            <Label x:Name="label_Copy"    HorizontalContentAlignment="Center"
+                   Foreground="#FF2196F3" 
+                   Content="اجمالي" 
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="10,10,0.10,10" FontSize="14"/>
+            <Label x:Name="label_Copy4"    HorizontalContentAlignment="Center"
+                   Foreground="#FF2196F3"
+                   Content="تاريخ البيع" 
+                    
+                   
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="10,10,0.10,10" FontSize="14"/>
+            <Label x:Name="label_Copy54"    HorizontalContentAlignment="Center"
+                   Foreground="#FF2196F3" Content="تاريخ البيع" HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="10,10,0.10,10" FontSize="14" Width="72"/>
+
+
+
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Height="55" VerticalAlignment="Top" Margin="10,312,0.2,0" RenderTransformOrigin="0.5,0.5">
+
+
+            <!--<DataGridTextColumn Header=" اسم العميل " Binding="{Binding NAME }" Width="100"></DataGridTextColumn>-->
+            <!-- <DataGridTextColumn Header=" رقم المنتج" Binding="{Binding PRODECTid}" Width="100"></DataGridTextColumn> -->
+
+            <TextBox x:Name="txtID_ORDER_INVOICE" 
+                     SpellCheck.IsEnabled="False"
+                     HorizontalAlignment="Center" 
+                     Height="29" Margin="10,10,0.1,0" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Top"
+                     Width="65" 
+                     Foreground="#FF2196F3"
+                     BorderBrush="#FF2196F3" 
+                     BorderThickness="0 0 0 3"/>
+            
+           
+
+            <TextBox x:Name="txtAMOUNT" 
+                     SpellCheck.IsEnabled="False"
+                     HorizontalAlignment="Center" 
+                     Height="29" Margin="10,10,0.1,0" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Top"
+                     Width="59" 
+                     Foreground="#FF2196F3"
+                     BorderBrush="#FF2196F3" 
+                     BorderThickness="0 0 0 3"/>
+
+
+            <TextBox x:Name="txtDISCOUNT" 
+                     SpellCheck.IsEnabled="False"
+                     HorizontalAlignment="Center" 
+                     Height="29" Margin="10,10,0.1,0" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Top"
+                     Width="63" 
+                     Foreground="#FF2196F3"
+                     BorderBrush="#FF2196F3" 
+                     BorderThickness="0 0 0 3"/>
+
+
+            <TextBox x:Name="txtID_PRODACT" 
+                     SpellCheck.IsEnabled="False"
+                     HorizontalAlignment="Center" 
+                     Height="29" Margin="10,10,0.1,0" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Top"
+                     Width="63" 
+                     Foreground="#FF2196F3"
+                     BorderBrush="#FF2196F3" 
+                     BorderThickness="0 0 0 3"/>
+
+
+
+            <TextBox x:Name="txtNAMEPRODACT_ORDER_INVOICE"  
+                     SpellCheck.IsEnabled="False" 
+                     HorizontalAlignment="Center" 
+                     Height="29" Margin="10,10,0.1,0" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Top"
+                     Width="52" 
+                     Foreground="#FF2196F3"
+                     BorderBrush="#FF2196F3"
+                     BorderThickness="0 0 0 3"/>
+
+
+            <TextBox x:Name="txtDESCRIBTUON_ORDER_INVOICE"  
+                     SpellCheck.IsEnabled="False" 
+                     HorizontalAlignment="Center" 
+                     Height="29" Margin="0,10,0.1,0" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Top"
+                     Width="71" 
+                     Foreground="#FF2196F3"
+                     BorderBrush="#FF2196F3"
+                     BorderThickness="0 0 0 3"/>
+
+            <TextBox x:Name="txtPRICE_ORDERinvoice" IsEnabled="True"  HorizontalAlignment="Center" Height="29" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="67" Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0 0 0 3" TextChanged="txtPRICE_ORDERinvoice_TextChanged"/>
+            <TextBox x:Name="txtQTY_ORDER_INVOICE" TextChanged="txtQTY_ORDER_INVOICE_TextChanged" SpellCheck.IsEnabled="False"  HorizontalAlignment="Center" Height="29" Margin="10,10,0.1,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0 0 0 3"/>
+            <TextBox x:Name="txtTOTAL_AMOUNT_INVOICE"  SpellCheck.IsEnabled="False"  HorizontalAlignment="Center" Height="29" Margin="10,10,0.1,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="56" Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0 0 0 3"/>
+            <TextBox x:Name="txtDATE_ORDER_INVOICE" IsEnabled="True"  HorizontalAlignment="Center" Height="29" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="63" Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0 0 0 3"/>
+
+            <ComboBox
+                    x:Name="compySelectTypeOrder"
+                    SelectionChanged="compySelectTypeOrder_SelectionChanged" 
+                    HorizontalAlignment="Left" Margin="10,10,0,0"
+                    VerticalAlignment="Top"
+                    Width="60" 
+                    Height="29" 
+            
+                    Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0,0,0,3">
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="White" Offset="0" />
+                        <GradientStop Color="White" Offset="1" />
+                    </LinearGradientBrush>
+                </ComboBox.Background>
+            </ComboBox>
+            <StackPanel Orientation="Horizontal" Height="55" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="204" Margin="10,10,0.1,-9.8">
+
+                <ComboBox
+                    x:Name="compySelectday"
+                    SelectionChanged="compySelectday_SelectionChanged" 
+                    HorizontalAlignment="Left" Margin="3,0,0,0"
+                    VerticalAlignment="Top"
+                    Width="60" 
+                    Height="29" 
+                    Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0,0,0,3">
+                    <ComboBox.Background>
+                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                            <GradientStop Color="White" Offset="0" />
+                            <GradientStop Color="White" Offset="1" />
+                        </LinearGradientBrush>
+                    </ComboBox.Background>
+                </ComboBox>
+                <ComboBox 
+                    x:Name="compySelectmonth" 
+                    SelectionChanged="compySelectmonth_SelectionChanged" 
+                    HorizontalAlignment="Center" 
+                    Margin="3,0,0,0"
+                    VerticalAlignment="Top" 
+                    Width="68" 
+                    Height="29" 
+                    Foreground="#FF2196F3" 
+                    BorderBrush="#FF2196F3"
+                    BorderThickness="0,0,0,3">
+                    <ComboBox.Background>
+                        <LinearGradientBrush
+                            EndPoint="0,1"
+                            StartPoint="0,0">
+                            <GradientStop 
+                                Color="White" 
+                                Offset="0" />
+                            <GradientStop 
+                                Color="White" 
+                                Offset="1" />
+                        </LinearGradientBrush>
+                    </ComboBox.Background>
+                </ComboBox>
+                <ComboBox 
+                    x:Name="compySelecyears" 
+                    SelectionChanged="compySelecyears_SelectionChanged"
+                    HorizontalAlignment="Right" 
+                    Margin="3,0,0,25.2" 
+                    VerticalAlignment="Stretch" 
+                    Width="63" 
+                    Foreground="#FF2196F3" 
+                    BorderBrush="#FF2196F3"
+                    BorderThickness="0,0,0,3">
+                    <ComboBox.Background >
+
+                        <LinearGradientBrush
+                            EndPoint="0,1" 
+                            StartPoint="0,0" >
+                            <GradientStop 
+                                Color="White" 
+                                Offset="0" />
+                            <GradientStop 
+                                Color="White"
+                                Offset="1" />
+                        </LinearGradientBrush>
+                    </ComboBox.Background>
+                </ComboBox>
+
+            </StackPanel>
+
+        </StackPanel>
+
+
+        <DataGrid   AutoGenerateColumns="False"  CanUserAddRows="False" x:Name="dataGrid" SelectionChanged="dataGrid_SelectionChanged"  HorizontalAlignment="Left" Margin="-2,358,0,0" Width="992" Loaded="dataGrid_Loaded" AlternatingRowBackground="#FF2196F3" Height="298" VerticalAlignment="Top">
+            <DataGrid.CacheMode>
+                <BitmapCache/>
+            </DataGrid.CacheMode>
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Header=" الايدي  " Binding="{Binding SUPPLIER_ID}" Width="60"></DataGridTextColumn>
+                <!--<DataGridTextColumn Header=" اسم العميل " Binding="{Binding NAME }" Width="100"></DataGridTextColumn>-->
+                <!-- <DataGridTextColumn Header=" رقم المنتج" Binding="{Binding PRODECTid}" Width="100"></DataGridTextColumn> -->
+                <DataGridTextColumn Header=" AMOUNT" Binding="{Binding AMOUNT}" Width="100"></DataGridTextColumn>
+
+                <DataGridTextColumn Header="  وصف الفاتورة  " Binding="{Binding DESCRIBTUON_ORDER}" Width="200"></DataGridTextColumn>
+                <DataGridTextColumn Header="   سعر الحبه " Binding="{Binding PRICE_ORDER }" Width="100"></DataGridTextColumn>
+                <DataGridTextColumn Header=" الكمية " Binding="{Binding QTY_ORDER}" Width="100"></DataGridTextColumn>
+
+                <DataGridTextColumn Header=" اجمالي" Binding="{Binding TOTAL_AMOUNT}" Width="100"></DataGridTextColumn>
+                <DataGridTextColumn Header=" تاريخ البيع  " Binding="{Binding DATE_ORDER}" Width="100"></DataGridTextColumn>
+
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Label x:Name="lblerror" Foreground="Red" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Margin="367,198,0,0" FontSize="14" Height="25" Width="233"/>
+
+        <StackPanel VerticalAlignment="Top">
+            <Grid Background="#FF0069C0" Height="10"/>
+            <Grid Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="11*"/>
+                    <RowDefinition Height="4*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,-2" Width="980" Grid.RowSpan="2">
+
+                    <TextBox x:Name="txtSearch"  TextChanged="txtSearch_TextChanged" AcceptsReturn="True" HorizontalAlignment="Right" Height="28" Margin="10,2,0,2" TextWrapping="Wrap" VerticalAlignment="Center" Width="209" Foreground="#FF2196F3" BorderBrush="#FF2196F3" BorderThickness="0 0 0 3">
+
+                    </TextBox>
+                    <Button x:Name="btnsearch" Click="btnsearch_Click"  Background="#FF2196F3" BorderThickness="0" Content="بحث"   VerticalAlignment="Center" Width="103" Height="32" Margin="0,0,0,0"/>
+                    <Button x:Name="btnexportpdf" Click="btnexportpdf_Click"  Background="#FF2196F3" BorderThickness="0" Content="تصدير كتاب"   VerticalAlignment="Center" Width="120" Height="32" Margin="0,0,0,0"/>
+
+                    <Button x:Name="btnprintalldataingride"  Click="btnprintalldataingride_Click"  Content="طباعة كل المنتوجات"  Margin="2,0,0,0" VerticalAlignment="Bottom" Width="147"/>
+
+                    <Button x:Name="btnselectprint" Click="btnselectprint_Click" Content="طباعة المنتوج المحدد "  Margin="2,0,0,0" VerticalAlignment="Center" Width="155"/>
+                    <Button x:Name="btnDelet" Click="btnDelet_Click" Content="حذف"  Margin="2,0,0,0" VerticalAlignment="Center" Width="75" Background="#FF2196F3"/>
+
+
+                    <Button x:Name="btnupdate" Content="تعديل" Click="btnupdate_Click"   Background="#FF2196F3" Foreground="WhiteSmoke"   Margin="2,0,0,0" HorizontalAlignment="Right" Padding="0" VerticalAlignment="Center"  Width="75"/>
+                    <Button x:Name="btninsert"  Click="btninsert_Click" Content="اضافة" Margin="2,0,0,0" VerticalAlignment="Center" Width="75"/>
+
+
+
+
+
+
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+        <DataGrid  
+            AutoGenerateColumns="False" 
+            CanUserAddRows="False"
+            x:Name="dataGridSuplier"
+            x:FieldModifier="public"
+            SelectionChanged="dataGridSuplier_SelectionChanged"
+            HorizontalAlignment="Left" Margin="-2,109,0,0" Width="430" Loaded="dataGrid_Loaded" AlternatingRowBackground="#FF2196F3" Height="145"  VerticalAlignment="Top">
+            <DataGrid.Columns>
+
+                <DataGridTextColumn  Header=" الايدي  " Binding="{Binding SUPPLIER_ID}" Width="60"/>
+                <!--<DataGridTextColumn Header=" اسم العميل " Binding="{Binding NAME }" Width="100"></DataGridTextColumn>-->
+                <!-- <DataGridTextColumn Header=" رقم المنتج" Binding="{Binding PRODECTid}" Width="100"></DataGridTextColumn> -->
+                <DataGridTextColumn Header="  اسم المحل " Binding="{Binding COMPANY_NAME}" Width="100"/>
+                <DataGridTextColumn Header="  التلفون " Binding="{Binding PHONE_NUMBER}" Width="100"/>
+                <DataGridTextColumn Header="  المحافظة " Binding="{Binding CITY}" Width="100"/>
+                <DataGridTextColumn Header="  الشارع " Binding="{Binding STREET}" Width="100"/>
+
+
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid Background="#FF0069C0" Margin="434,107,550.2,439.2"/>
+        <Grid Background="#FF0069C0" Margin="10,259,0.2,431.2"/>
+        <Button x:Name="btninsertNewSuplier" x:FieldModifier="public" Click="btninsertNewSuplier_Click"  Content="اضافة  منتج" Margin="853,76,19.2,592.2" VerticalAlignment="Center"/>
+        <DataGrid AutoGenerateColumns="True"  x:Name="dataGridProdact" SelectionChanged="dataGridProdact_SelectionChanged"  HorizontalAlignment="Left" Margin="455,109,0,0" Width="535" Loaded="dataGrid_Loaded" AlternatingRowBackground="#FF2196F3" MouseRightButtonDown="dataGrid_MouseRightButtonDown" Height="143" VerticalAlignment="Top">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header=" رقم المنتج" Binding="{Binding PRODECTid}" Width="50"/>
+
+                <DataGridTextColumn Header=" اسم المنتج" Binding="{Binding NAMEORodect}" Width="100"/>
+                <DataGridTextColumn Header="وصف المنتج" Binding="{Binding DESCRIPTIONPRODUCT}" Width="110"/>
+                <DataGridTextColumn Header="الكمية" Binding="{Binding quantyty}" Width="70"/>
+
+                <DataGridTextColumn Header=" السعر " Binding="{Binding PRICE}" Width="70"/>
+                <!-- <DataGridTextColumn Header=" رقم المنتج" Binding="{Binding PRODECTid}" Width="100"></DataGridTextColumn> -->
+                <DataGridTextColumn Header="  وصف الصنف " Binding="{Binding DESCRIPTIONCATEGURY}" Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Orientation="Horizontal" Height="55" VerticalAlignment="Top" Margin="10,645,425.2,0" RenderTransformOrigin="0.5,0.5">
+            <!-- <DataGridTextColumn Header=" رقم المنتج" Binding="{Binding PRODECTid}" Width="100"></DataGridTextColumn> -->
+
+            <TextBox x:Name="txtCountItem" 
+                SpellCheck.IsEnabled="False"
+                      IsEnabled="False"
+                HorizontalAlignment="Center" 
+                Height="29" Margin="10,10,0.1,0" 
+                TextWrapping="Wrap" 
+                VerticalAlignment="Top"
+                Width="52" 
+                Foreground="#FF2196F3"
+                BorderBrush="#FF2196F3" 
+                BorderThickness="0 0 0 3"/>
+
+
+            <Label x:Name="label_Copy1300"   HorizontalContentAlignment="Center"
+                   Foreground="#FF2196F3" 
+                   Content=" عدد المنتجات" 
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="10,10,0.1,0" FontSize="14" RenderTransformOrigin="0.917,0.907" Width="129"/>
+
+            <TextBox x:Name="txtSumTOTAL" 
+                SpellCheck.IsEnabled="False"
+                     IsEnabled="False"
+                HorizontalAlignment="Center" 
+                Height="29" Margin="10,10,0.1,0" 
+                TextWrapping="Wrap" 
+                VerticalAlignment="Top"
+                Width="218" 
+                Foreground="#FF2196F3"
+                BorderBrush="#FF2196F3" 
+                BorderThickness="0 0 0 3"/>
+
+
+            <Label x:Name="label_Copy130"   HorizontalContentAlignment="Center"
+                   Foreground="#FF2196F3" 
+                   Content=" الاجمالي الكلي" 
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="10,10,0.1,0" FontSize="14" RenderTransformOrigin="0.917,0.907" Width="129"/>
+
+            <!-- <DataGridTextColumn Header=" رقم المنتج" Binding="{Binding PRODECTid}" Width="100"></DataGridTextColumn> -->
+
+
+            <!--<DataGridTextColumn Header=" اسم العميل " Binding="{Binding NAME }" Width="100"></DataGridTextColumn>-->
+            <!-- <DataGridTextColumn Header=" رقم المنتج" Binding="{Binding PRODECTid}" Width="100"></DataGridTextColumn> -->
+
+
+
+
+        </StackPanel>
+
+    </Grid>
+
+</UserControl>

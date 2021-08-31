@@ -3,7 +3,7 @@
     حول النظام
 </h1>
  <br>
-    نظام إدارة المبيعات حيث يقوم هذا النظام بأدارة المبيعات للمحلات الصغيرة ويقوم النظام بالعمليات التالية
+    نظام إدارة المبيعات حيث يقوم هذا النظام بأدارة المبيعات للمحلات الصغيرة  ويقوم النظام بالعمليات التالية
      <br>
     1-اضافة مستخدمين
      <br>
@@ -66,9 +66,19 @@ Sales management system, where this system manages sales for small shops and the
      13-Change the theme
      <br>
       <br>
+      <h1 >
+    (Requerments) المتطلبات 
+    </h1>
+     <br>
+    1-SQL Server
+    <br>
+    2-import DataBase or attach DB from system
+     <br>
+    2-Run System  
+    <br>
        <br>
         <br>
-     <div style="Width:80%">
+     <div >
     <img src="image/1.png"/>
     </div>
      <br>
